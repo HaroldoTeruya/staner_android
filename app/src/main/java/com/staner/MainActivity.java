@@ -466,6 +466,18 @@ public class MainActivity extends AppCompatActivity implements
         return playlistList;
     }
 
+    public MediaFileInfo getMusicById(int id)
+    {
+        for( MediaFileInfo mediaFileInfo : musicList )
+        {
+            if( mediaFileInfo.getId() == id )
+            {
+                return mediaFileInfo;
+            }
+        }
+        return null;
+    }
+
     //=================================================================================================
     //============================================== CLASS ============================================
     //=================================================================================================
