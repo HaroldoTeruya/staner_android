@@ -330,6 +330,9 @@ public class MainActivity extends AppCompatActivity implements
         playerController.stop();
     }
 
+    @Override
+    public void finish(){ playerController.stop(); this.finish(); }
+
     /**
      * Return the music object by name.
      *

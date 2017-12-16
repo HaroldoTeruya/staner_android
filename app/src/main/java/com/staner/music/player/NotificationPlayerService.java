@@ -106,6 +106,8 @@ public class NotificationPlayerService extends Service
                 notificationPlayerServiceListener.stop();
             }
 
+            notificationPlayerServiceListener.finish();
+
             stopForeground(true);
             stopSelf();
         }
@@ -118,13 +120,13 @@ public class NotificationPlayerService extends Service
     {
         if( play )
         {
-            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
-            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
+            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
+            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
         }
         else
         {
-            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
-            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
+            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
+            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
         }
 
         notification.contentView = views;
@@ -274,5 +276,7 @@ public class NotificationPlayerService extends Service
         void next();
 
         void stop();
+
+        void finish();
     }
 }
