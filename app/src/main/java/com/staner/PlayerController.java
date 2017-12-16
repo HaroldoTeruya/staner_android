@@ -37,12 +37,14 @@ public class PlayerController
     {
         Log.d(TAG, playlistName + " " + musicId + " play");
 
-        if( musicId != currentId )
-        {
-            PlayerFragment playerFragment = new PlayerFragment();
-            playerFragment.setPlayerController(this);
-            mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerController.TAG).commit();
-        }
+//        this.mainActivity.
+
+//        if( musicId != currentId )
+//        {
+//            PlayerFragment playerFragment = new PlayerFragment();
+//            playerFragment.setPlayerController(this);
+//            mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerController.TAG).commit();
+//        }
     }
 
     public void resume()
