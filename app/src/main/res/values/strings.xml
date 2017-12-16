@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">Staner</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="album">Álbuns</string>
+    <string name="playlist">Playlists</string>
+    <string name="other">Outros</string>
+
+    <string name="search">Buscar...</string>
+    <string name="add_to_playlist">Adicionar à playlist</string>
+    <string name="confirm">Confirmar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="search_for_playlist">Busque o nome da playlist...</string>
+    <string name="remove_playlist">Remover desta playlist</string>
+    <string name="remove_playlist_request">Deseja remover essa playlist?</string>
+    <string name="remove_music_request">Deseja remover essa música?</string>
+    <string name="all">Todos</string>
+    <string name="genery">Gênero</string>
+    <string name="artist">Artistas</string>
+
+    <string name="preset_menu">Padrão</string>
+    <string name="preset_name">Nome da preset...</string>
+    <string name="preset_save">SALVAR PRESET</string>
+    <string name="preset_edit">EDITAR PRESET</string>
+    <string name="save">Salvar</string>
+    <string name="flat">Flat</string>
+
+    <string name="play">play</string>
+
+    <!-- notification player -->
+    <string name="cd_repeat">Repeat one or all</string>
+    <string name="cd_previous">Skip backwards</string>
+    <string name="cd_play">Play and pause</string>
+    <string name="cd_next">Skip forwards</string>
+
+    <!-- create / edit playlist dialog fragment -->
+    <string name="create_playlist">CRIAR PLAYLIST</string>
+    <string name="edit">Editar...</string>
+    <string name="edit_playlist">EDITAR PLAYLIST</string>
+    <string name="name_of_image">Sem imagem</string>
+    <string name="playlist_name">Nome da playlist...</string>
+    <string name="playlist_created">Playlist criado!</string>
+    <string name="playlist_already_exist">Já existe playlist com esse nome!</string>
+    <string name="playlist_edited">Playlist editado!</string>
+    <string name="playlist_removed">Playlist removida!</string>
+    <string name="click_in_image_to_change">Clique na imagem para alterar...</string>
+    <string name="remove_this_playlist">Remover playlist</string>
+    <string name="remove_music_playlist_request">Deseja remover desta playlist?</string>
+    <string name="unknow">Desconhecido</string>
+
+
+</resources>
