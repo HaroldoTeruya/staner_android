@@ -3,7 +3,9 @@ package com.staner.tab.playlist;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ import com.staner.R;
 import com.staner.database.DataBaseController;
 import com.staner.model.MediaFileInfo;
 import com.staner.model.PlaylistModel;
+import com.staner.tab.album.AlbumMusicFragment;
 import com.staner.tab.base.BaseListener;
 import com.staner.tab.playlist.dialog.CreatePlaylistDialogFragment;
 import com.staner.tab.playlist.dialog.EditPlaylistDialogFragment;
@@ -26,6 +29,7 @@ import com.staner.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Teruya on 25/09/15.
@@ -38,6 +42,7 @@ public class PlaylistTab implements TabHost.TabContentFactory
 
     private MainActivity mainActivity = null;
     public static final String TAG = "PlaylistTab";
+    private PlaylistAdapter playlistAdapter = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -63,7 +68,7 @@ public class PlaylistTab implements TabHost.TabContentFactory
     public View createTabContent( String tag )
     {
         final View view = Util.inflate(mainActivity, R.layout.playlist_tab_content_layout);
-        final PlaylistAdapter playlistAdapter = new PlaylistAdapter();
+        playlistAdapter = new PlaylistAdapter();
         final GridView gridview = (GridView) view.findViewById(R.id.gridview);
 
         final PLaylistInterface playlistInterface = new PLaylistInterface()
@@ -96,7 +101,7 @@ public class PlaylistTab implements TabHost.TabContentFactory
             {
                 PlaylistMusicFragment playlistMusicFragment = PlaylistMusicFragment.instantiate(view.getId());
                 playlistMusicFragment.setPLaylistInterface(playlistInterface);
-                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.playlist_fragment_container, playlistMusicFragment).addToBackStack(null).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.playlist_fragment_container, playlistMusicFragment, PlaylistMusicFragment.TAG).addToBackStack(null).commit();
             }
         });
 
@@ -190,6 +195,19 @@ public class PlaylistTab implements TabHost.TabContentFactory
         return view;
     }
 
+    public void filter(String text)
+    {
+        Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(PlaylistMusicFragment.TAG);
+        if( fragment != null ) {
+            ((PlaylistMusicFragment)fragment).filter(text);
+            Log.d(TAG, fragment.getClass().getName());
+        }
+        else if( playlistAdapter != null ){
+            playlistAdapter.filter(text);
+            Log.d(TAG, PlaylistMusicFragment.TAG + "eokfoekfekfk");
+        }
+    }
+
     //=================================================================================================
     //============================================== EVENTS ===========================================
     //=================================================================================================
@@ -205,10 +223,14 @@ public class PlaylistTab implements TabHost.TabContentFactory
     public class PlaylistAdapter extends BaseAdapter
     {
         private List<List<MediaFileInfo>> playlistList = null;
+        private List<List<MediaFileInfo>> filteredPlaylistList = null;
 
         public PlaylistAdapter()
         {
             playlistList = mainActivity.getPlaylistList();
+
+            filteredPlaylistList = new ArrayList<>();
+            filteredPlaylistList.addAll(playlistList);
         }
 
         public int getCount() {
@@ -262,6 +284,27 @@ public class PlaylistTab implements TabHost.TabContentFactory
             // update the playlist in the mainactivity
             mainActivity.addPlaylist(mediaFileInfoList);
 
+            notifyDataSetChanged();
+        }
+
+        public void filter(String text)
+        {
+            text = text.toLowerCase(Locale.getDefault());
+            playlistList.clear();
+            if( text.isEmpty() )
+            {
+                playlistList.addAll(filteredPlaylistList);
+            }
+            else
+            {
+                for (List<MediaFileInfo> mediaFileInfoList : filteredPlaylistList)
+                {
+                    if (mediaFileInfoList.get(0).getFilePlaylist().toLowerCase(Locale.getDefault()).contains(text))
+                    {
+                        playlistList.add(mediaFileInfoList);
+                    }
+                }
+            }
             notifyDataSetChanged();
         }
     }

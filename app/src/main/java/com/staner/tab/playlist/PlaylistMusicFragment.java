@@ -46,6 +46,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
     private byte art[] = null;
     private String name = "";
     private PlaylistTab.PLaylistInterface playlistInterface = null;
+    private MusicListAdapter musicListAdapter;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -86,7 +87,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         setHeaderView();
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        MusicListAdapter musicListAdapter = new MusicListAdapter(mediaFileInfoList);
+        musicListAdapter = new MusicListAdapter(mediaFileInfoList);
         listView.setAdapter(musicListAdapter);
     }
 
@@ -207,36 +208,10 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         this.playlistInterface = playlistInterface;
     }
 
-//    @Override
-//    public void onPlaylistEdited()
-//    {
-//        MainActivity mainActivity = (MainActivity) getActivity();
-//        PlaylistModel playlistModel = mainActivity.getPlaylistById(id);
-//        ((ImageView)getView().findViewById(R.id.imageview)).setImageBitmap(playlistModel.getArt());
-//        ((TextView)getView().findViewById(R.id.textview)).setText(playlistModel.getName());
-//
-//        baseListener.onPlaylistEdited();
-//    }
-//
-//    @Override
-//    public void onPlaylistRemoved(int id)
-//    {
-//        // updating the PlaylistTab
-//        baseListener.onPlaylistRemoved(id);
-//
-//        // returning to the PlaylistTab
-//        getActivity().getSupportFragmentManager().popBackStackImmediate();
-//    }
-//
-//    @Override
-//    public void onRemoveMusicFromPlaylistListener(int musicId)
-//    {
-//        Log.d(TAG, "onRemoveMusicFromPlaylistListener " + id + " " + musicId);
-//
-//        itemArray.remove(getItemById(musicId));
-//        dragListView.getAdapter().notifyDataSetChanged();
-//        ((MainActivity)getActivity()).removeMusicFromPlaylist(id, musicId);
-//    }
+    public void filter(String text)
+    {
+        musicListAdapter.filter(text);
+    }
 
     //=================================================================================================
     //============================================== EVENTS ===========================================
@@ -252,15 +227,20 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
 
     public class MusicListAdapter extends BaseAdapter
     {
-        private List<MediaFileInfo> musicList = new ArrayList<>();
+        private List<MediaFileInfo> musicList;
+        private List<MediaFileInfo> filteredMusicList;
 
         public MusicListAdapter(List<MediaFileInfo> musicList)
         {
+            this.musicList = new ArrayList<>();
             int size = musicList.size();
             for( int i = 1; i < size; i++ )
             {
                 this.musicList.add(musicList.get(i));
             }
+
+            filteredMusicList = new ArrayList<>();
+            filteredMusicList.addAll(this.musicList);
         }
 
         public int getCount()
@@ -349,6 +329,12 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
                 }
             });
             popup.show();
+        }
+
+        public void filter(String text)
+        {
+            musicList = Util.filter(musicList, filteredMusicList, text);
+            notifyDataSetChanged();
         }
     }
 

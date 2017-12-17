@@ -24,6 +24,7 @@ import com.staner.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Teruya on 13/06/17.
@@ -37,6 +38,7 @@ public class GenrePageFragment extends Fragment
 
     private MainActivity mainActivity;
     public static final String TAG = "GenrePageFragment";
+    private GenreCoverAdapter genreCoverAdapter = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -61,16 +63,24 @@ public class GenrePageFragment extends Fragment
         mainActivity = (MainActivity) getActivity();
 
         GridView gridview = (GridView) view.findViewById(R.id.gridview);
-        gridview.setAdapter(new GenreCoverAdapter(mainActivity));
+        genreCoverAdapter = new GenreCoverAdapter(mainActivity);
+        gridview.setAdapter(genreCoverAdapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
                 Log.d(TAG, "onItemClick: " + view.getTag());
-                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.other_fragment_container, GenreMusicFragment.instantiate(String.valueOf(view.getTag()))).addToBackStack(null).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.other_fragment_container, GenreMusicFragment.instantiate(String.valueOf(view.getTag())), GenreMusicFragment.TAG).addToBackStack(null).commit();
             }
         });
+    }
+
+    public void filter(String text)
+    {
+        Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(GenreMusicFragment.TAG);
+        if( fragment != null ) ((GenreMusicFragment)fragment).filter(text);
+        else genreCoverAdapter.filter(text);
     }
 
     //=================================================================================================
@@ -88,6 +98,7 @@ public class GenrePageFragment extends Fragment
     public class GenreCoverAdapter extends BaseAdapter
     {
         private List<List<MediaFileInfo>> mediaFileCollectionList = null;
+        private List<List<MediaFileInfo>> filteredMediaFileCollectionList = null;
 
         public GenreCoverAdapter(MainActivity mainActivity)
         {
@@ -120,6 +131,9 @@ public class GenrePageFragment extends Fragment
                     }
                 }
             }
+
+            filteredMediaFileCollectionList = new ArrayList<>();
+            filteredMediaFileCollectionList.addAll(mediaFileCollectionList);
         }
 
         public int getCount()
@@ -157,6 +171,27 @@ public class GenrePageFragment extends Fragment
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(image);
             ((TextView)convertView.findViewById(R.id.textview)).setText(name);
             return convertView;
+        }
+
+        public void filter(String text)
+        {
+            text = text.toLowerCase(Locale.getDefault());
+            mediaFileCollectionList.clear();
+            if( text.isEmpty() )
+            {
+                mediaFileCollectionList.addAll(filteredMediaFileCollectionList);
+            }
+            else
+            {
+                for (List<MediaFileInfo> mediaFileInfoList : filteredMediaFileCollectionList)
+                {
+                    if (mediaFileInfoList.get(0).getFileGenre().toLowerCase(Locale.getDefault()).contains(text))
+                    {
+                        mediaFileCollectionList.add(mediaFileInfoList);
+                    }
+                }
+            }
+            notifyDataSetChanged();
         }
     }
 }

@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.AlbumModel;
+import com.staner.model.MediaFileInfo;
 import com.staner.model.MusicModel;
 import com.staner.tab.base.BaseListener;
 
@@ -27,6 +28,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class Util
 {
@@ -405,6 +407,48 @@ public class Util
     public static Bitmap getThumbnailFromImage(Bitmap image)
     {
         return Bitmap.createScaledBitmap(image, 96, 96, false);
+    }
+
+    public static List<MediaFileInfo> filter(List<MediaFileInfo> musicList, List<MediaFileInfo> filteredMusicList, String text)
+    {
+        text = text.toLowerCase(Locale.getDefault());
+        musicList.clear();
+        if( text.isEmpty() )
+        {
+            musicList.addAll(filteredMusicList);
+        }
+        else
+        {
+            for (MediaFileInfo mediaFileInfoList : filteredMusicList)
+            {
+                if (mediaFileInfoList.getFileName().toLowerCase(Locale.getDefault()).contains(text))
+                {
+                    musicList.add(mediaFileInfoList);
+                }
+            }
+        }
+        return musicList;
+    }
+
+    public static List<List<MediaFileInfo>> filterPlaylist(List<List<MediaFileInfo>> mediaFileCollectionList, List<List<MediaFileInfo>> filteredMediaFileCollectionList, String text)
+    {
+        text = text.toLowerCase(Locale.getDefault());
+        mediaFileCollectionList.clear();
+        if( text.isEmpty() )
+        {
+            mediaFileCollectionList.addAll(filteredMediaFileCollectionList);
+        }
+        else
+        {
+            for (List<MediaFileInfo> mediaFileInfoList : filteredMediaFileCollectionList)
+            {
+                if (mediaFileInfoList.get(0).getFileAlbumName().toLowerCase(Locale.getDefault()).contains(text))
+                {
+                    mediaFileCollectionList.add(mediaFileInfoList);
+                }
+            }
+        }
+        return mediaFileCollectionList;
     }
 
     // ===================================================================================

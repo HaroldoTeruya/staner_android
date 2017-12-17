@@ -107,10 +107,10 @@ public class NotificationPlayerService extends Service
                 notificationPlayerServiceListener.stop();
             }
 
-            notificationPlayerServiceListener.finish();
-
             stopForeground(true);
             stopSelf();
+
+            notificationPlayerServiceListener.close();
         }
 
         // return default value
@@ -278,6 +278,6 @@ public class NotificationPlayerService extends Service
 
         void stop();
 
-        void finish();
+        void close();
     }
 }

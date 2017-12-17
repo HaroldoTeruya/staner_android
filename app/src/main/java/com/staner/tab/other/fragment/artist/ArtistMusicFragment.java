@@ -36,6 +36,7 @@ public class ArtistMusicFragment extends Fragment
 
     private MainActivity mainActivity;
     public static final String TAG = "ArtistMusicFragment";
+    private MusicListAdapter musicListAdapter = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -73,7 +74,8 @@ public class ArtistMusicFragment extends Fragment
         setHeaderView(mediaFileInfoList.get(0).getFileAlbumArt(), name);
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        listView.setAdapter(new MusicListAdapter(mediaFileInfoList));
+        musicListAdapter = new MusicListAdapter(mediaFileInfoList);
+        listView.setAdapter(musicListAdapter);
     }
 
     /*
@@ -128,6 +130,11 @@ public class ArtistMusicFragment extends Fragment
         });
     }
 
+    public void filter(String text)
+    {
+        musicListAdapter.filter(text);
+    }
+
     //=================================================================================================
     //============================================== EVENTS ===========================================
     //=================================================================================================
@@ -143,10 +150,14 @@ public class ArtistMusicFragment extends Fragment
     public class MusicListAdapter extends BaseAdapter
     {
         private List<MediaFileInfo> musicList;
+        private List<MediaFileInfo> filteredMusicList;
 
         public MusicListAdapter(List<MediaFileInfo> musicList)
         {
             this.musicList = musicList;
+
+            filteredMusicList = new ArrayList<>();
+            filteredMusicList.addAll(musicList);
         }
 
         public int getCount()
@@ -226,6 +237,12 @@ public class ArtistMusicFragment extends Fragment
                 }
             });
             popup.show();
+        }
+
+        public void filter(String text)
+        {
+            musicList = Util.filter(musicList, filteredMusicList, text);
+            notifyDataSetChanged();
         }
     }
 }

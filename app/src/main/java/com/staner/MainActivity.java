@@ -181,11 +181,13 @@ public class MainActivity extends AppCompatActivity implements
                 switch ( currentTab )
                 {
                     case 0:
-                        albumTab.getAlbumAdapter().filter(text);
+                        albumTab.filter(text);
                         break;
                     case 1:
+                        playlistTab.filter(text);
                         break;
                     case 2:
+                        otherTab.filter(text);
                         break;
                 }
                 return false;
@@ -194,11 +196,6 @@ public class MainActivity extends AppCompatActivity implements
 
         return true;
     }
-
-//    private void filterAlbum(String text)
-//    {
-//        albumTab.
-//    }
 
     /*
      *
@@ -253,11 +250,17 @@ public class MainActivity extends AppCompatActivity implements
         currentView = tabHost.getCurrentView();
         if (tabHost.getCurrentTab() > currentTab)
         {
+            if( tabHost.getCurrentTab() == 1) albumTab.filter("");
+            else if( tabHost.getCurrentTab() == 2  ) playlistTab.filter("");
+
             previousView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
             currentView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
         }
         else
         {
+            if( tabHost.getCurrentTab() == 1 ) playlistTab.filter("");
+            else if( tabHost.getCurrentTab() == 2 ) otherTab.filter("");
+
             previousView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
             currentView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
         }
@@ -373,7 +376,7 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void finish(){ playerController.stop(); this.finish(); }
+    public void close(){ playerController.stop(); finish();  }
 
     /**
      * Return the music object by name.

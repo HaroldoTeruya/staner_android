@@ -18,10 +18,12 @@ import android.widget.TextView;
 import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.MediaFileInfo;
+import com.staner.tab.album.AlbumMusicFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Teruya on 13/06/17.
@@ -35,6 +37,7 @@ public class ArtistPageFragment extends Fragment
 
     private MainActivity mainActivity;
     public static final String TAG = "ArtistPageFragment";
+    private ArtistCoverAdapter artistCoverAdapter = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -59,17 +62,26 @@ public class ArtistPageFragment extends Fragment
         mainActivity = (MainActivity) getActivity();
 
         GridView gridview = (GridView) view.findViewById(R.id.gridview);
-        gridview.setAdapter(new ArtistCoverAdapter(mainActivity));
+        artistCoverAdapter = new ArtistCoverAdapter(mainActivity);
+        gridview.setAdapter(artistCoverAdapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
                 Log.d(TAG, "onItemClick: " + view.getTag());
-                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.other_fragment_container, ArtistMusicFragment.instantiate(String.valueOf(view.getTag()))).addToBackStack(null).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.other_fragment_container, ArtistMusicFragment.instantiate(String.valueOf(view.getTag())), ArtistMusicFragment.TAG).addToBackStack(null).commit();
             }
         });
     }
+
+    public void filter(String text)
+    {
+        Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(ArtistMusicFragment.TAG);
+        if( fragment != null ) ((ArtistMusicFragment)fragment).filter(text);
+        else artistCoverAdapter.filter(text);
+    }
+
 
     //=================================================================================================
     //============================================== EVENTS ===========================================
@@ -86,6 +98,7 @@ public class ArtistPageFragment extends Fragment
     public class ArtistCoverAdapter extends BaseAdapter
     {
         private List<List<MediaFileInfo>> mediaFileCollectionList = null;
+        private List<List<MediaFileInfo>> filteredMediaFileCollectionList = null;
 
         public ArtistCoverAdapter(MainActivity mainActivity)
         {
@@ -118,6 +131,9 @@ public class ArtistPageFragment extends Fragment
                     }
                 }
             }
+
+            filteredMediaFileCollectionList = new ArrayList<>();
+            filteredMediaFileCollectionList.addAll(mediaFileCollectionList);
         }
 
         public int getCount()
@@ -155,6 +171,27 @@ public class ArtistPageFragment extends Fragment
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(image);
             ((TextView)convertView.findViewById(R.id.textview)).setText(name);
             return convertView;
+        }
+
+        public void filter(String text)
+        {
+            text = text.toLowerCase(Locale.getDefault());
+            mediaFileCollectionList.clear();
+            if( text.isEmpty() )
+            {
+                mediaFileCollectionList.addAll(filteredMediaFileCollectionList);
+            }
+            else
+            {
+                for (List<MediaFileInfo> mediaFileInfoList : filteredMediaFileCollectionList)
+                {
+                    if (mediaFileInfoList.get(0).getFileArtist().toLowerCase(Locale.getDefault()).contains(text))
+                    {
+                        mediaFileCollectionList.add(mediaFileInfoList);
+                    }
+                }
+            }
+            notifyDataSetChanged();
         }
     }
 }

@@ -41,6 +41,7 @@ public class AllMusicPageFragment extends Fragment
 
     private MainActivity mainActivity;
     public static final String TAG = "AllMusicPageFragment";
+    private MusicListAdapter musicListAdapter = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -63,7 +64,13 @@ public class AllMusicPageFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        listView.setAdapter(new MusicListAdapter(mainActivity.getMusicList()));
+        musicListAdapter = new MusicListAdapter(mainActivity.getMusicList());
+        listView.setAdapter(musicListAdapter);
+    }
+
+    public void filter(String text)
+    {
+        musicListAdapter.filter(text);
     }
 
     //=================================================================================================
@@ -81,10 +88,14 @@ public class AllMusicPageFragment extends Fragment
     public class MusicListAdapter extends BaseAdapter
     {
         private List<MediaFileInfo> musicList;
+        private List<MediaFileInfo> filteredMusicList;
 
         public MusicListAdapter(List<MediaFileInfo> musicList)
         {
             this.musicList = musicList;
+
+            filteredMusicList = new ArrayList<>();
+            this.filteredMusicList.addAll(musicList);
         }
 
         public int getCount()
@@ -163,6 +174,12 @@ public class AllMusicPageFragment extends Fragment
                 }
             });
             popup.show();
+        }
+
+        public void filter(String text)
+        {
+            musicList = Util.filter(musicList, filteredMusicList, text);
+            notifyDataSetChanged();
         }
     }
 }

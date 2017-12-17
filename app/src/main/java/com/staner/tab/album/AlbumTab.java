@@ -2,6 +2,7 @@ package com.staner.tab.album;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -18,10 +20,12 @@ import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.AlbumModel;
 import com.staner.model.MediaFileInfo;
+import com.staner.tab.other.fragment.all.AllMusicPageFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Teruya on 25/09/15.
@@ -70,10 +74,17 @@ public class AlbumTab implements TabHost.TabContentFactory
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
                 Log.d(TAG, "onItemClick: " + view.getTag());
-                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.album_fragment_container, AlbumMusicFragment.instantiate(String.valueOf(view.getTag()))).addToBackStack(null).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.album_fragment_container, AlbumMusicFragment.instantiate(String.valueOf(view.getTag())), AlbumMusicFragment.TAG).addToBackStack(null).commit();
             }
         });
         return view;
+    }
+
+    public void filter(String text)
+    {
+        Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(AlbumMusicFragment.TAG);
+        if( fragment != null ) ((AlbumMusicFragment)fragment).filter(text);
+        else albumAdapter.filter(text);
     }
 
     //=================================================================================================
@@ -84,12 +95,6 @@ public class AlbumTab implements TabHost.TabContentFactory
     //======================================== SETTERS  & GETTERS =====================================
     //=================================================================================================
 
-    public AlbumAdapter getAlbumAdapter()
-    {
-        return albumAdapter;
-    }
-
-
     //=================================================================================================
     //============================================== CLASS ============================================
     //=================================================================================================
@@ -97,10 +102,13 @@ public class AlbumTab implements TabHost.TabContentFactory
     public class AlbumAdapter extends BaseAdapter
     {
         private List<List<MediaFileInfo>> mediaFileCollectionList = null;
+        private List<List<MediaFileInfo>> filteredMediaFileCollectionList = null;
 
         public AlbumAdapter()
         {
+            filteredMediaFileCollectionList = new ArrayList<>();
             mediaFileCollectionList = new ArrayList<>();
+
             for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
             {
                 String name = mediaFileInfo.getFileAlbumName();
@@ -129,6 +137,8 @@ public class AlbumTab implements TabHost.TabContentFactory
                     }
                 }
             }
+
+            filteredMediaFileCollectionList.addAll(mediaFileCollectionList);
         }
 
         public int getCount()
@@ -173,8 +183,24 @@ public class AlbumTab implements TabHost.TabContentFactory
 
         public void filter(String text)
         {
-            Log.d(TAG, text);
-//            ada
+//            text = text.toLowerCase(Locale.getDefault());
+//            mediaFileCollectionList.clear();
+//            if( text.isEmpty() )
+//            {
+//                mediaFileCollectionList.addAll(filteredMediaFileCollectionList);
+//            }
+//            else
+//            {
+//                for (List<MediaFileInfo> mediaFileInfoList : filteredMediaFileCollectionList)
+//                {
+//                    if (mediaFileInfoList.get(0).getFileAlbumName().toLowerCase(Locale.getDefault()).contains(text))
+//                    {
+//                        mediaFileCollectionList.add(mediaFileInfoList);
+//                    }
+//                }
+//            }
+            mediaFileCollectionList = Util.filterPlaylist(mediaFileCollectionList, filteredMediaFileCollectionList, text);
+            notifyDataSetChanged();
         }
     }
 }
