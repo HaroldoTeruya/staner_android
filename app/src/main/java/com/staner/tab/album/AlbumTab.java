@@ -34,6 +34,7 @@ public class AlbumTab implements TabHost.TabContentFactory
 
     private MainActivity mainActivity;
     public final static String TAG = "AlbumTab";
+    private AlbumAdapter albumAdapter;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -61,7 +62,8 @@ public class AlbumTab implements TabHost.TabContentFactory
         View view = Util.inflate(mainActivity, R.layout.album_tab_content_layout);
 
         GridView gridview = (GridView) view.findViewById(R.id.gridview);
-        gridview.setAdapter(new AlbumAdapter());
+        albumAdapter = new AlbumAdapter();
+        gridview.setAdapter(albumAdapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
@@ -81,6 +83,12 @@ public class AlbumTab implements TabHost.TabContentFactory
     //=================================================================================================
     //======================================== SETTERS  & GETTERS =====================================
     //=================================================================================================
+
+    public AlbumAdapter getAlbumAdapter()
+    {
+        return albumAdapter;
+    }
+
 
     //=================================================================================================
     //============================================== CLASS ============================================
@@ -157,6 +165,12 @@ public class AlbumTab implements TabHost.TabContentFactory
             ((TextView)convertView.findViewById(R.id.textview)).setText(name);
 
             return convertView;
+        }
+
+        public void filter(String text)
+        {
+            Log.d(TAG, text);
+//            ada
         }
     }
 }

@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.staner.MainActivity;
+import com.staner.PlayerController;
 import com.staner.R;
 
 /**
@@ -191,7 +192,7 @@ public class NotificationPlayerService extends Service
         notification.contentView = views;
         notification.bigContentView = bigViews;
         notification.flags = Notification.FLAG_ONGOING_EVENT;
-        notification.icon = R.drawable.logo;
+        notification.icon = R.drawable.logo_staner72;
         notification.contentIntent = pendingIntent;
 
         startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
@@ -239,7 +240,7 @@ public class NotificationPlayerService extends Service
             BitmapFactory.Options options = new BitmapFactory.Options();
             try
             {
-                bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_album_art, options);
+                bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_staner192, options);
             }
             catch (Error ee)
             {

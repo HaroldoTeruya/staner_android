@@ -184,7 +184,8 @@ public class AlbumMusicFragment extends Fragment
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(Util.getThumbnailFromImage(image));
             ((TextView)convertView.findViewById(R.id.name_textview)).setText(name);
-            ((ImageView)convertView.findViewById(R.id.menu_button)).setOnClickListener(new View.OnClickListener()
+
+            convertView.findViewById(R.id.menu_button).setOnClickListener(new View.OnClickListener()
             {
                 @Override
                 public void onClick(View view)

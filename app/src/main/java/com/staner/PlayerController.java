@@ -37,12 +37,9 @@ public class PlayerController
     {
         Log.d(TAG, playlistName + " " + musicId + " play");
 
-        if( musicId != currentId )
-        {
-            PlayerFragment playerFragment = new PlayerFragment();
-            playerFragment.setPlayerController(this);
-            mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerController.TAG).commit();
-        }
+        PlayerFragment playerFragment = new PlayerFragment();
+        // playerFragment set
+        mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
     }
 
     public void resume()

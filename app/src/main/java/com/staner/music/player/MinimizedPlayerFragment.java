@@ -54,7 +54,7 @@ public class MinimizedPlayerFragment extends Fragment
             public void onClick(View view)
             {
                 getActivity().findViewById(R.id.minimized_player_content).setVisibility(View.GONE);
-                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, new MusicPlayerFragment()).addToBackStack(MusicPlayerFragment.TAG).commit();
+//                getActivity().getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, new MusicPlayerFragment()).addToBackStack(MusicPlayerFragment.TAG).commit();
             }
         });
     }

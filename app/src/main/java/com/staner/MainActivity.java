@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -22,6 +23,8 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
@@ -77,6 +80,11 @@ public class MainActivity extends AppCompatActivity implements
     private DialogFragment dialogFragment = null;
 
     private PlayerController playerController = null;
+
+    // the tabs
+    private AlbumTab albumTab;
+    private PlaylistTab playlistTab;
+    private OtherTab otherTab;
 
     /**
      * This service is responsible to connect and disconnect the notification player music.
@@ -154,12 +162,43 @@ public class MainActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
 
+        // associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                Log.d(TAG,query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text)
+            {
+                switch ( currentTab )
+                {
+                    case 0:
+                        albumTab.getAlbumAdapter().filter(text);
+                        break;
+                    case 1:
+                        break;
+                    case 2:
+                        break;
+                }
+                return false;
+            }
+        });
 
         return true;
     }
+
+//    private void filterAlbum(String text)
+//    {
+//        albumTab.
+//    }
 
     /*
      *
@@ -181,22 +220,25 @@ public class MainActivity extends AppCompatActivity implements
         tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
 
-        TabHost.TabSpec albumTab = tabHost.newTabSpec("1");
-        TabHost.TabSpec playlistTab = tabHost.newTabSpec("2");
-        TabHost.TabSpec otherTab = tabHost.newTabSpec("3");
+        TabHost.TabSpec albumTabSpec = tabHost.newTabSpec("1");
+        TabHost.TabSpec playlistTabSpec = tabHost.newTabSpec("2");
+        TabHost.TabSpec otherTabSpec = tabHost.newTabSpec("3");
 
-        albumTab.setIndicator(AlbumTab.tabHeader(this));
-        albumTab.setContent(new AlbumTab(this));
+        albumTabSpec.setIndicator(AlbumTab.tabHeader(this));
+        albumTab = new AlbumTab(this);
+        albumTabSpec.setContent(albumTab);
 
-        playlistTab.setIndicator(PlaylistTab.tabHeader(this));
-        playlistTab.setContent(new PlaylistTab(this));
+        playlistTabSpec.setIndicator(PlaylistTab.tabHeader(this));
+        playlistTab = new PlaylistTab(this);
+        playlistTabSpec.setContent(playlistTab);
 
-        otherTab.setIndicator(OtherTab.tabHeader(this));
-        otherTab.setContent(new OtherTab(this));
+        otherTabSpec.setIndicator(OtherTab.tabHeader(this));
+        otherTab = new OtherTab(this);
+        otherTabSpec.setContent(otherTab);
 
-        tabHost.addTab(albumTab);
-        tabHost.addTab(playlistTab);
-        tabHost.addTab(otherTab);
+        tabHost.addTab(albumTabSpec);
+        tabHost.addTab(playlistTabSpec);
+        tabHost.addTab(otherTabSpec);
         tabHost.setOnTabChangedListener(this);
 
         this.previousView = tabHost.getCurrentView();
@@ -237,7 +279,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void startService()
     {
-        // if( ) we have to put a condition here, startService only if we have a song playing.
+        // TODO if( ) we have to put a condition here, startService only if we have a song playing.
         {
             Intent serviceIntent = new Intent(MainActivity.this, NotificationPlayerService.class);
             bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);

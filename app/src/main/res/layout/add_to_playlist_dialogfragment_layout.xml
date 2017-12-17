@@ -19,7 +19,9 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/cancel"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_orange_dark"
+            android:background="@drawable/default_button_indicator"/>
     </RelativeLayout>
 
     <RelativeLayout

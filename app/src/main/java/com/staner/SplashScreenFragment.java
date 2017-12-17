@@ -122,7 +122,10 @@ public class SplashScreenFragment extends Fragment
                         fileArtist = getString(R.string.unknow);
                     }
 
-                    mediaFileInfoList.add(new MediaFileInfo(filePath, fileName, fileAlbumName, duration, fileAlbumArt, fileGenre, fileArtist, id));
+                    if( filePath!=null && !filePath.isEmpty() && fileName!=null && !fileName.isEmpty()  )
+                    {
+                        mediaFileInfoList.add(new MediaFileInfo(filePath, fileName, fileAlbumName, duration, fileAlbumArt, fileGenre, fileArtist, id));
+                    }
                 }
             }
             cursor.close();
