@@ -235,6 +235,7 @@ public class PlaylistTab implements TabHost.TabContentFactory
                 image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.playlist);
             }
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
+            image = Util.getThumbnailFromImage(image);
 
             convertView = Util.inflate(mainActivity, R.layout.cover_layout);
             convertView.setId(playlistId);

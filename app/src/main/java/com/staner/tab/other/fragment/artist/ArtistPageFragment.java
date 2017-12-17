@@ -145,8 +145,12 @@ public class ArtistPageFragment extends Fragment
                 image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.artist);
             }
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
+            image = Util.getThumbnailFromImage(image);
 
-            convertView = Util.inflate(mainActivity, R.layout.cover_layout);
+            if( convertView == null )
+            {
+                convertView = Util.inflate(mainActivity, R.layout.cover_layout);
+            }
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(image);
             ((TextView)convertView.findViewById(R.id.textview)).setText(name);

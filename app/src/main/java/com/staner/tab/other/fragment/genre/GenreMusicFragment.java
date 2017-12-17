@@ -177,8 +177,12 @@ public class GenreMusicFragment extends Fragment
                 image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.genre);
             }
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
+            image = Util.getThumbnailFromImage(image);
 
-            convertView = Util.inflate(mainActivity, R.layout.item_list_layout);
+            if( convertView == null )
+            {
+                convertView = Util.inflate(mainActivity, R.layout.item_list_layout);
+            }
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(Util.getThumbnailFromImage(image));
             ((TextView)convertView.findViewById(R.id.name_textview)).setText(name);

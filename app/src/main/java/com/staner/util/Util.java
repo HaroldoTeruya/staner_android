@@ -404,7 +404,7 @@ public class Util
 
     public static Bitmap getThumbnailFromImage(Bitmap image)
     {
-        return Bitmap.createScaledBitmap(image, 124, 124, false);
+        return Bitmap.createScaledBitmap(image, 96, 96, false);
     }
 
     // ===================================================================================

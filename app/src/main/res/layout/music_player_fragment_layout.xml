@@ -38,8 +38,7 @@
                     android:layout_width="@dimen/default_icon_size"
                     android:layout_height="@dimen/default_icon_size"
                     android:layout_marginRight="@dimen/default_margin"
-                    android:src="@drawable/minimize"
-                    android:visibility="visibl"/>
+                    android:src="@drawable/minimize"/>
             <ImageView
                 android:id="@+id/close_button"
                 android:layout_width="@dimen/default_icon_size"
