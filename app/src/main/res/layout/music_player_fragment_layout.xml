@@ -32,12 +32,14 @@
                     android:layout_marginLeft="@dimen/default_margin"
                     android:layout_marginRight="@dimen/default_margin"
                     android:src="@drawable/equalizer"/>
+
                 <ImageView
                     android:id="@+id/minimized_player_button"
                     android:layout_width="@dimen/default_icon_size"
                     android:layout_height="@dimen/default_icon_size"
                     android:layout_marginRight="@dimen/default_margin"
-                    android:src="@drawable/minimize"/>
+                    android:src="@drawable/minimize"
+                    android:visibility="visibl"/>
             <ImageView
                 android:id="@+id/close_button"
                 android:layout_width="@dimen/default_icon_size"

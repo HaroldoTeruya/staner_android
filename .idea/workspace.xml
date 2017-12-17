@@ -10,44 +10,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fb288cf5-c54a-4442-ae8b-a7ee31497ebc" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/music/player/MusicPlayerFragment.java" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/logo.png" afterPath="" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/Logo-Staner-192x192.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/logo_staner192.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/Logo-Staner-512x512.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/logo_staner512.png" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/app/src/main/res/drawable/Logo-Staner-72x72.png" afterPath="$PROJECT_DIR$/app/src/main/res/drawable/logo_staner72.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/fileHashes/fileHashes.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/javaCompile/classAnalysis.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/javaCompile/classAnalysis.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/javaCompile/javaCompile.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/javaCompile/javaCompile.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/javaCompile/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/javaCompile/taskHistory.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/fileSnapshots.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/fileSnapshots.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" afterPath="$PROJECT_DIR$/.gradle/4.1/taskHistory/taskHistory.lock" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/app.iml" afterPath="$PROJECT_DIR$/app/app.iml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" afterPath="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/MainActivity.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/MainActivity.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/PlayerController.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/PlayerController.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/PlayerFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/PlayerFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/SplashScreenFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/SplashScreenFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/music/player/MinimizedPlayerFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/music/player/MinimizedPlayerFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/music/player/NotificationPlayerService.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/music/player/NotificationPlayerService.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/album/AlbumMusicFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/album/AlbumMusicFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/album/AlbumTab.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/album/AlbumTab.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/other/fragment/all/AllMusicPageFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/other/fragment/all/AllMusicPageFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/other/fragment/artist/ArtistMusicFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/other/fragment/artist/ArtistMusicFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/other/fragment/genre/GenreMusicFragment.java" afterPath="$PROJECT_DIR$/app/src/main/java/com/staner/tab/other/fragment/genre/GenreMusicFragment.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/add_to_playlist_dialogfragment_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/add_to_playlist_dialogfragment_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/minimized_music_player_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/minimized_music_player_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/music_edit_preset_dialogfragment_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/music_edit_preset_dialogfragment_layout.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/music_player_fragment_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/music_player_fragment_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/music_save_preset_dialogfragment_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/music_save_preset_dialogfragment_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/playlist_create_edit_dialogfragment_content_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/playlist_create_edit_dialogfragment_content_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/playlist_item_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/playlist_item_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/splash_screen_fragmentactivity_layout.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/splash_screen_fragmentactivity_layout.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/layout/status_bar.xml" afterPath="$PROJECT_DIR$/app/src/main/res/layout/status_bar.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/colors.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/xml/searchable.xml" afterPath="$PROJECT_DIR$/app/src/main/res/xml/searchable.xml" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -70,65 +35,44 @@
     </system>
   </component>
   <component name="FileEditorManager">
-    <splitter split-orientation="horizontal" split-proportion="0.5338904">
-      <split-first>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
-            <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/MainActivity.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="428">
-                  <caret line="126" column="166" lean-forward="false" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="166" />
-                  <folding>
-                    <element signature="method#onResume#0;class#MainActivity#0" expanded="false" />
-                    <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
-                    <element signature="method#onDestroy#0;class#MainActivity#0" expanded="false" />
-                    <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
-                    <element signature="method#onConfigurationChanged#0;class#MainActivity#0" expanded="false" />
-                    <element signature="method#createTab#0;class#MainActivity#0" expanded="false" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-          <file leaf-file-name="PlayerFragment.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/PlayerFragment.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="-311">
-                  <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#2159#2516#0" expanded="true" />
-                    <element signature="e#2515#2516#0" expanded="true" />
-                    <element signature="e#2582#2982#0" expanded="true" />
-                    <element signature="e#2981#2982#0" expanded="true" />
-                    <element signature="e#3048#3224#0" expanded="true" />
-                    <element signature="e#3223#3224#0" expanded="true" />
-                    <element signature="e#3290#3466#0" expanded="true" />
-                    <element signature="e#3465#3466#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-first>
-      <split-second>
-        <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-          <file leaf-file-name="PlayerController.java" pinned="false" current-in-tab="true">
-            <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/PlayerController.java">
-              <provider selected="true" editor-type-id="text-editor">
-                <state relative-caret-position="371">
-                  <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-                  <folding>
-                    <element signature="e#1054#1055#0" expanded="true" />
-                    <element signature="e#1102#1103#0" expanded="true" />
-                  </folding>
-                </state>
-              </provider>
-            </entry>
-          </file>
-        </leaf>
-      </split-second>
-    </splitter>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file leaf-file-name="MainActivity.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/MainActivity.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="481">
+              <caret line="527" column="103" lean-forward="true" selection-start-line="525" selection-start-column="0" selection-end-line="527" selection-end-column="103" />
+              <folding>
+                <element signature="method#onResume#0;class#MainActivity#0" expanded="false" />
+                <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
+                <element signature="method#onDestroy#0;class#MainActivity#0" expanded="false" />
+                <element signature="method#onCreateOptionsMenu#0;class#MainActivity#0" expanded="false" />
+                <element signature="method#onConfigurationChanged#0;class#MainActivity#0" expanded="false" />
+                <element signature="method#createTab#0;class#MainActivity#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PlayerFragment.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/PlayerFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="108">
+              <caret line="41" column="55" lean-forward="false" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
+              <folding>
+                <element signature="e#2227#2584#0" expanded="true" />
+                <element signature="e#2583#2584#0" expanded="true" />
+                <element signature="e#2650#3050#0" expanded="true" />
+                <element signature="e#3049#3050#0" expanded="true" />
+                <element signature="e#3116#3292#0" expanded="true" />
+                <element signature="e#3291#3292#0" expanded="true" />
+                <element signature="e#3358#3534#0" expanded="true" />
+                <element signature="e#3533#3534#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
@@ -1866,7 +1810,6 @@
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/splash_screen_fragmentactivity_layout.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/minimized_music_player_layout.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/music_player_fragment_layout.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/playlist_item_layout.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/staner/tab/album/AlbumMusicFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/staner/tab/other/fragment/all/AllMusicPageFragment.java" />
@@ -1886,6 +1829,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/staner/music/player/MinimizedPlayerFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/staner/PlayerFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/staner/PlayerController.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/music_player_fragment_layout.xml" />
       </list>
     </option>
   </component>
@@ -2234,7 +2178,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513521056434" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513523699533" />
       </method>
     </configuration>
     <configuration default="true" type="AndroidTestRunConfigurationType" factoryName="Android Instrumented Tests">
@@ -2282,7 +2226,7 @@
       </Profilers>
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513521056434" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513523699534" />
       </method>
     </configuration>
     <configuration default="true" type="Application" factoryName="Application">
@@ -2465,7 +2409,7 @@
       <option name="ACTIVITY_CLASS" value="" />
       <method>
         <option name="Android.Gradle.BeforeRunTask" enabled="true" />
-        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513521056436" />
+        <option name="com.android.instantApps.provision.BeforeRunTask" enabled="true" clearCache="false" clearProvisionedDevices="false" myTimestamp="1513523699534" />
       </method>
     </configuration>
     <list size="1">
@@ -2508,7 +2452,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1440" height="900" extended-state="0" />
-    <editor active="true" />
     <layout>
       <window_info id="Android Profiler" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2526,7 +2469,7 @@
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18383405" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18383405" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2617866" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -2608,17 +2551,6 @@
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
-        <state />
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/music_player_fragment_layout.xml">
-      <provider editor-type-id="text-editor">
-        <state relative-caret-position="125">
-          <caret line="177" column="52" lean-forward="false" selection-start-line="177" selection-start-column="52" selection-end-line="177" selection-end-column="52" />
-          <folding />
-        </state>
-      </provider>
-      <provider selected="true" editor-type-id="android-designer2">
         <state />
       </provider>
     </entry>
@@ -2788,6 +2720,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2795,6 +2728,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -2802,6 +2736,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
       <provider editor-type-id="android-designer2">
@@ -2967,8 +2902,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/MainActivity.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="428">
-          <caret line="126" column="166" lean-forward="false" selection-start-line="126" selection-start-column="8" selection-end-line="126" selection-end-column="166" />
+        <state relative-caret-position="481">
+          <caret line="527" column="103" lean-forward="true" selection-start-line="525" selection-start-column="0" selection-end-line="527" selection-end-column="103" />
           <folding>
             <element signature="method#onResume#0;class#MainActivity#0" expanded="false" />
             <element signature="method#onStop#0;class#MainActivity#0" expanded="false" />
@@ -2982,28 +2917,40 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/PlayerController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="38" column="0" lean-forward="false" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
+        <state relative-caret-position="236">
+          <caret line="46" column="11" lean-forward="false" selection-start-line="46" selection-start-column="11" selection-end-line="46" selection-end-column="11" />
           <folding>
-            <element signature="e#1054#1055#0" expanded="true" />
-            <element signature="e#1102#1103#0" expanded="true" />
+            <element signature="imports" expanded="true" />
+            <element signature="e#1145#1146#0" expanded="true" />
+            <element signature="e#1193#1194#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/music_player_fragment_layout.xml">
+      <provider editor-type-id="text-editor">
+        <state relative-caret-position="2655">
+          <caret line="179" column="52" lean-forward="false" selection-start-line="179" selection-start-column="52" selection-end-line="179" selection-end-column="52" />
+          <folding />
+        </state>
+      </provider>
+      <provider selected="true" editor-type-id="android-designer2">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/staner/PlayerFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-311">
-          <caret line="31" column="0" lean-forward="false" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
+        <state relative-caret-position="108">
+          <caret line="41" column="55" lean-forward="false" selection-start-line="41" selection-start-column="55" selection-end-line="41" selection-end-column="55" />
           <folding>
-            <element signature="e#2159#2516#0" expanded="true" />
-            <element signature="e#2515#2516#0" expanded="true" />
-            <element signature="e#2582#2982#0" expanded="true" />
-            <element signature="e#2981#2982#0" expanded="true" />
-            <element signature="e#3048#3224#0" expanded="true" />
-            <element signature="e#3223#3224#0" expanded="true" />
-            <element signature="e#3290#3466#0" expanded="true" />
-            <element signature="e#3465#3466#0" expanded="true" />
+            <element signature="e#2227#2584#0" expanded="true" />
+            <element signature="e#2583#2584#0" expanded="true" />
+            <element signature="e#2650#3050#0" expanded="true" />
+            <element signature="e#3049#3050#0" expanded="true" />
+            <element signature="e#3116#3292#0" expanded="true" />
+            <element signature="e#3291#3292#0" expanded="true" />
+            <element signature="e#3358#3534#0" expanded="true" />
+            <element signature="e#3533#3534#0" expanded="true" />
           </folding>
         </state>
       </provider>

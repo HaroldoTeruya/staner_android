@@ -6,7 +6,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.staner.model.MediaFileInfo;
 import com.staner.util.Util;
 
 /**
@@ -95,6 +97,16 @@ public class PlayerFragment extends Fragment
     {
         super.onDetach();
         ((MainActivity)getActivity()).getSupportActionBar().show();
+    }
+
+    void loadMediaFileInfo(MediaFileInfo mediaFileInfo)
+    {
+
+    }
+
+    void setTimeTrack(int time)
+    {
+
     }
 
     //=================================================================================================

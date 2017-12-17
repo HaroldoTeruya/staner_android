@@ -2,6 +2,8 @@ package com.staner;
 
 import android.util.Log;
 
+import com.staner.model.MediaFileInfo;
+
 /**
  * Created by Teruya on 16/12/17.
  */
@@ -20,6 +22,8 @@ public class PlayerController
     private int prevId = -1;
     private int nextId = -1;
 
+    private PlayerFragment playerFragment = null;
+
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
     //=================================================================================================
@@ -37,8 +41,12 @@ public class PlayerController
     {
         Log.d(TAG, playlistName + " " + musicId + " play");
 
-        PlayerFragment playerFragment = new PlayerFragment();
-        // playerFragment set
+        playerFragment = new PlayerFragment();
+
+        // use with responsibility
+        // playerFragment.loadMediaFileInfo(); // load in the fragment the media file info
+        // playerFragment.setTimeTrack();      // set time track if has a music playing
+
         mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
     }
 
@@ -66,4 +74,8 @@ public class PlayerController
     {
         Log.d(TAG, "stop");
     }
+
+    //=================================================================================================
+    //============================================== CLASS ============================================
+    //=================================================================================================
 }
