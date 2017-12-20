@@ -71,7 +71,7 @@ public class ArtistMusicFragment extends Fragment
 
         List<MediaFileInfo> mediaFileInfoList = populateMusicList(name);
 
-        setHeaderView(mediaFileInfoList.get(0).getFileAlbumArt(), name);
+        setHeaderView(mainActivity.getRawImageById(mediaFileInfoList.get(0).getId()), name);
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
         musicListAdapter = new MusicListAdapter(mediaFileInfoList);
@@ -109,7 +109,12 @@ public class ArtistMusicFragment extends Fragment
         }
         else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
-        ((ImageView) getView().findViewById(R.id.imageview)).setImageBitmap(image);
+        ImageView imageView = ((ImageView) getView().findViewById(R.id.imageview));
+        image = Util.getThumbnailFromImage(image);
+        imageView.setImageBitmap(image);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setAdjustViewBounds(true);
+
         ((TextView) getView().findViewById(R.id.textview)).setText(name);
 
         // when clicked in the play/pause button in the header
@@ -178,9 +183,9 @@ public class ArtistMusicFragment extends Fragment
         public View getView(int position, View convertView, ViewGroup parent)
         {
             final String name = musicList.get(position).getFileName();
-            final int musicId = musicList.get(position).getId();
             final String albumName = musicList.get(position).getFileAlbumName();
-            byte raw[] = musicList.get(position).getFileAlbumArt();
+            final int id = musicList.get(position).getId();
+            byte raw[] = mainActivity.getRawImageById(id);
             Bitmap image = null;
             if( raw == null )
             {
@@ -212,7 +217,7 @@ public class ArtistMusicFragment extends Fragment
                 @Override
                 public void onClick(View view)
                 {
-                    mainActivity.play(albumName, musicId);
+                    mainActivity.play(albumName, id);
                 }
             });
 

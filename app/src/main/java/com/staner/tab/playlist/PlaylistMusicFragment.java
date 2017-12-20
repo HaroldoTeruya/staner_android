@@ -118,7 +118,12 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         }
         else image = BitmapFactory.decodeByteArray(art, 0, art.length);
 
-        ((ImageView) getView().findViewById(R.id.imageview)).setImageBitmap(image);
+        ImageView imageView = ((ImageView) getView().findViewById(R.id.imageview));
+        image = Util.getThumbnailFromImage(image);
+        imageView.setImageBitmap(image);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setAdjustViewBounds(true);
+
         ((TextView) getView().findViewById(R.id.textview)).setText(name);
 
         // when clicked in the play/pause button in the header
@@ -158,7 +163,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
     @Override
     public void onPlaylistCreated()
     {
-
+        Log.d(TAG, "empty");
     }
 
     @Override
@@ -261,8 +266,9 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         public View getView(int position, View convertView, ViewGroup parent)
         {
             final String name = musicList.get(position).getFileName();
-
-            byte raw[] = musicList.get(position).getFileAlbumArt();
+            final String playlistName = musicList.get(position).getFilePlaylist();
+            final int id = musicList.get(position).getId();
+            byte raw[] = mainActivity.getRawImageById(id);
             Bitmap image = null;
             if( raw == null )
             {
@@ -284,6 +290,15 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
                 public void onClick(View view)
                 {
                     createMusicPlaylistPopupMenu(name, view);
+                }
+            });
+
+            convertView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    mainActivity.play(playlistName, id);
                 }
             });
 

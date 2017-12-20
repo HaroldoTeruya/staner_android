@@ -23,7 +23,6 @@
                 android:id="@+id/imageview"
                 android:layout_width="@dimen/cover_width"
                 android:layout_height="@dimen/cover_width"
-                android:scaleType="centerCrop"
                 android:src="@drawable/playlist"/>
 
             <TextView

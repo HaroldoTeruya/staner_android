@@ -160,8 +160,8 @@ public class AlbumTab implements TabHost.TabContentFactory
         public View getView(int position, View convertView, ViewGroup parent)
         {
             String name = mediaFileCollectionList.get(position).get(0).getFileAlbumName();
-
-            byte raw[] = mediaFileCollectionList.get(position).get(0).getFileAlbumArt();
+            int id = mediaFileCollectionList.get(position).get(0).getId();
+            byte raw[] = mainActivity.getRawImageById(id);
             Bitmap image = null;
             if( raw == null )
             {
@@ -183,22 +183,6 @@ public class AlbumTab implements TabHost.TabContentFactory
 
         public void filter(String text)
         {
-//            text = text.toLowerCase(Locale.getDefault());
-//            mediaFileCollectionList.clear();
-//            if( text.isEmpty() )
-//            {
-//                mediaFileCollectionList.addAll(filteredMediaFileCollectionList);
-//            }
-//            else
-//            {
-//                for (List<MediaFileInfo> mediaFileInfoList : filteredMediaFileCollectionList)
-//                {
-//                    if (mediaFileInfoList.get(0).getFileAlbumName().toLowerCase(Locale.getDefault()).contains(text))
-//                    {
-//                        mediaFileCollectionList.add(mediaFileInfoList);
-//                    }
-//                }
-//            }
             mediaFileCollectionList = Util.filterPlaylist(mediaFileCollectionList, filteredMediaFileCollectionList, text);
             notifyDataSetChanged();
         }

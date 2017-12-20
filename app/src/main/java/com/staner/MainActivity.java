@@ -29,6 +29,7 @@ import android.widget.ImageView;
 import android.widget.TabHost;
 
 import com.staner.database.DataBaseController;
+import com.staner.model.ImageModel;
 import com.staner.model.MediaFileInfo;
 import com.staner.model.PlaylistModel;
 import com.staner.music.player.NotificationPlayerService;
@@ -75,6 +76,7 @@ public class MainActivity extends AppCompatActivity implements
     // the entire data
     private List<MediaFileInfo> musicList = new ArrayList<>();
     private List<List<MediaFileInfo>> playlistList = new ArrayList<>();
+    private List<ImageModel> imageModelList = new ArrayList<>();
 
     // dialog fragment used to load image from th gallery
     private DialogFragment dialogFragment = null;
@@ -124,6 +126,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
+        getSupportActionBar().hide();
+
+        // used to load all the data. When the loading process is finished, the createTab is called
         getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, new SplashScreenFragment()).addToBackStack(SplashScreenFragment.TAG).commit();
 
         playerController = new PlayerController(this);
@@ -211,8 +216,23 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void createTab(List<MediaFileInfo> mediaFileInfoList, List<List<MediaFileInfo>> playlistList)
     {
-        setMusicList(mediaFileInfoList);
-        setPlaylistList(playlistList);
+        getSupportActionBar().show();
+
+        this.musicList = mediaFileInfoList;
+        this.playlistList = playlistList;
+
+        for (MediaFileInfo mediaFileInfo : musicList)
+        {
+            imageModelList.add(new ImageModel(mediaFileInfo.getFileAlbumArt(), mediaFileInfo.getId()));
+            mediaFileInfo.setFileAlbumArt(null);
+        }
+        for (List<MediaFileInfo> playlist : playlistList)
+        {
+            for (int i = 1; i < playlist.size(); i++)
+            {
+                playlist.get(i).setFileAlbumArt(null);
+            }
+        }
 
         tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
@@ -328,8 +348,9 @@ public class MainActivity extends AppCompatActivity implements
                 {
                     ImageView imageView = ((ImageView)dialogFragment.getView().findViewById(R.id.imageview));
                     imageView.setTag(chosenImageUri);
+                    imageView.setImageBitmap(Util.scaleImage(bitmap, 600));
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    imageView.setImageBitmap(Util.getThumbnailFromImage(bitmap));
+                    imageView.setAdjustViewBounds(true);
                 }
             }
             catch (IOException e)
@@ -494,16 +515,6 @@ public class MainActivity extends AppCompatActivity implements
         return musicList;
     }
 
-    public void setMusicList(List<MediaFileInfo> musicList)
-    {
-        this.musicList = musicList;
-    }
-
-    public void setPlaylistList(List<List<MediaFileInfo>> playlistList)
-    {
-        this.playlistList = playlistList;
-    }
-
     public void addPlaylist(List<MediaFileInfo> mediaFileInfoList)
     {
         this.playlistList.add(mediaFileInfoList);
@@ -521,6 +532,18 @@ public class MainActivity extends AppCompatActivity implements
             if( mediaFileInfo.getId() == id )
             {
                 return mediaFileInfo;
+            }
+        }
+        return null;
+    }
+
+    public byte[] getRawImageById(int id)
+    {
+        for (ImageModel imageModel : imageModelList)
+        {
+            if( imageModel.getId() == id )
+            {
+                return imageModel.getRawImage();
             }
         }
         return null;

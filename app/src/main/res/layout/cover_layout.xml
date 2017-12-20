@@ -13,9 +13,7 @@
         <ImageView
             android:id="@+id/imageview"
             android:layout_width="@dimen/cover_image_width"
-            android:layout_height="@dimen/cover_image_width"
-            android:scaleType="centerCrop"
-            android:layout_gravity="center">
+            android:layout_height="@dimen/cover_image_width">
         </ImageView>
 
         <TextView

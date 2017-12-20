@@ -153,8 +153,8 @@ public class ArtistPageFragment extends Fragment
         public View getView(int position, View convertView, ViewGroup parent)
         {
             String name = mediaFileCollectionList.get(position).get(0).getFileArtist();
-
-            byte raw[] = mediaFileCollectionList.get(position).get(0).getFileAlbumArt();
+            int id = mediaFileCollectionList.get(position).get(0).getId();
+            byte raw[] = mainActivity.getRawImageById(id);
             Bitmap image = null;
             if( raw == null )
             {

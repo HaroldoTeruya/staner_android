@@ -406,7 +406,44 @@ public class Util
 
     public static Bitmap getThumbnailFromImage(Bitmap image)
     {
-        return Bitmap.createScaledBitmap(image, 96, 96, false);
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float ratioBitmap = (float) width / (float) height;
+        float ratioMax = 1;
+
+        int finalWidth = 96;
+        int finalHeight = 96;
+        if (ratioMax > ratioBitmap)
+        {
+            finalWidth = (int) ((float)96 * ratioBitmap);
+        }
+        else
+        {
+            finalHeight = (int) ((float)96 / ratioBitmap);
+        }
+        image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+        return image;
+    }
+
+    public static Bitmap scaleImage(Bitmap image, int size)
+    {
+        int width = image.getWidth();
+        int height = image.getHeight();
+        float ratioBitmap = (float) width / (float) height;
+        float ratioMax = 1;
+
+        int finalWidth = size;
+        int finalHeight = size;
+        if (ratioMax > ratioBitmap)
+        {
+            finalWidth = (int) ((float)size * ratioBitmap);
+        }
+        else
+        {
+            finalHeight = (int) ((float)size / ratioBitmap);
+        }
+        image = Bitmap.createScaledBitmap(image, finalWidth, finalHeight, true);
+        return image;
     }
 
     public static List<MediaFileInfo> filter(List<MediaFileInfo> musicList, List<MediaFileInfo> filteredMusicList, String text)

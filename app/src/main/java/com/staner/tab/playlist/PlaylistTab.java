@@ -43,6 +43,7 @@ public class PlaylistTab implements TabHost.TabContentFactory
     private MainActivity mainActivity = null;
     public static final String TAG = "PlaylistTab";
     private PlaylistAdapter playlistAdapter = null;
+    private GridView gridview;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -69,14 +70,14 @@ public class PlaylistTab implements TabHost.TabContentFactory
     {
         final View view = Util.inflate(mainActivity, R.layout.playlist_tab_content_layout);
         playlistAdapter = new PlaylistAdapter();
-        final GridView gridview = (GridView) view.findViewById(R.id.gridview);
+        gridview = (GridView) view.findViewById(R.id.gridview);
 
         final PLaylistInterface playlistInterface = new PLaylistInterface()
         {
             @Override
             public void onPlaylistCreated(String name, Bitmap art)
             {
-                playlistAdapter.createPlaylist(name, art);
+                createPlaylist(name, art);
             }
 
             @Override
@@ -89,7 +90,9 @@ public class PlaylistTab implements TabHost.TabContentFactory
             public void onPlaylistRemoved(int id)
             {
                 mainActivity.removePlaylist(id);
-                gridview.setAdapter(new PlaylistAdapter());
+
+                playlistAdapter = new PlaylistAdapter();
+                gridview.setAdapter(playlistAdapter);
             }
         };
 
@@ -195,16 +198,37 @@ public class PlaylistTab implements TabHost.TabContentFactory
         return view;
     }
 
+    public void createPlaylist(String name, Bitmap art)
+    {
+        // create in the data base the playlist
+        DataBaseController dataBaseController = new DataBaseController(mainActivity);
+        int id = dataBaseController.insertPlaylist(name, art);
+
+        // create the playlist object
+        List<MediaFileInfo> mediaFileInfoList = new ArrayList<>();
+        MediaFileInfo mediaFileInfo = new MediaFileInfo();
+        mediaFileInfo.setFilePlaylist(name);
+        mediaFileInfo.setId(id);
+        mediaFileInfo.setFileAlbumArt(Util.convertBitmapToByte(art));
+        mediaFileInfoList.add(mediaFileInfo);
+
+        // update the playlist in the mainActivity
+        mainActivity.addPlaylist(mediaFileInfoList);
+
+        playlistAdapter = new PlaylistAdapter();
+        gridview.setAdapter(playlistAdapter);
+    }
+
     public void filter(String text)
     {
         Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(PlaylistMusicFragment.TAG);
-        if( fragment != null ) {
+        if( fragment != null )
+        {
             ((PlaylistMusicFragment)fragment).filter(text);
-            Log.d(TAG, fragment.getClass().getName());
         }
-        else if( playlistAdapter != null ){
+        else if( playlistAdapter != null )
+        {
             playlistAdapter.filter(text);
-            Log.d(TAG, PlaylistMusicFragment.TAG + "eokfoekfekfk");
         }
     }
 
@@ -259,32 +283,19 @@ public class PlaylistTab implements TabHost.TabContentFactory
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
             image = Util.getThumbnailFromImage(image);
 
-            convertView = Util.inflate(mainActivity, R.layout.cover_layout);
+            if( convertView == null )
+            {
+                convertView = Util.inflate(mainActivity, R.layout.cover_layout);
+            }
             convertView.setId(playlistId);
-            ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(image);
+            ImageView imageView = ((ImageView)convertView.findViewById(R.id.imageview));
+            imageView.setImageBitmap(image);
+            imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+            imageView.setAdjustViewBounds(true);
+
             ((TextView)convertView.findViewById(R.id.textview)).setText(name);
 
             return convertView;
-        }
-
-        public void createPlaylist(String name, Bitmap art)
-        {
-            // create in the data base the playlist
-            DataBaseController dataBaseController = new DataBaseController(mainActivity);
-            int id = dataBaseController.insertPlaylist(name, art);
-
-            // create the playlist object
-            List<MediaFileInfo> mediaFileInfoList = new ArrayList<>();
-            MediaFileInfo mediaFileInfo = new MediaFileInfo();
-            mediaFileInfo.setFilePlaylist(name);
-            mediaFileInfo.setId(id);
-            mediaFileInfo.setFileAlbumArt(Util.convertBitmapToByte(art));
-            mediaFileInfoList.add(mediaFileInfo);
-
-            // update the playlist in the mainactivity
-            mainActivity.addPlaylist(mediaFileInfoList);
-
-            notifyDataSetChanged();
         }
 
         public void filter(String text)

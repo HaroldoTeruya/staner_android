@@ -61,7 +61,7 @@ public class CreatePlaylistDialogFragment extends DialogFragment
                 {
                     Toast.makeText(getActivity(), R.string.playlist_already_exist, Toast.LENGTH_LONG).show();
                 }
-                else
+                else if( !name.isEmpty() )
                 {
                     playlistInterface.onPlaylistCreated(name, art);
 
