@@ -1,6 +1,11 @@
 package com.staner;
 
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.provider.MediaStore;
 import android.util.Log;
+
+import java.io.IOException;
 
 /**
  * Created by Teruya on 16/12/17.
@@ -13,6 +18,7 @@ public class PlayerController
     //=================================================================================================
 
     private MainActivity mainActivity = null;
+    private MediaPlayer mediaPlayer;
     public static final String TAG = PlayerController.class.getName();
 
     private String playlistName = "";
@@ -33,29 +39,48 @@ public class PlayerController
     //============================================= METHODS ===========================================
     //=================================================================================================
 
-    public void play(String playlistName, int musicId)
-    {
+    public void play(String playlistName, int musicId) {
         Log.d(TAG, playlistName + " " + musicId + " play");
-
-//        this.mainActivity.
-
-//        if( musicId != currentId )
-//        {
-//            PlayerFragment playerFragment = new PlayerFragment();
-//            playerFragment.setPlayerController(this);
-//            mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerController.TAG).commit();
-//        }
+        this.playlistName = playlistName;
+        this.stop();
+        this.currentId = musicId;
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mediaPlayer) {
+                mediaPlayer.start();
+            }
+        });
+        try {
+            mediaPlayer.setDataSource(mainActivity.getMusicById(musicId).getFilePath());
+            mediaPlayer.prepareAsync();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void resume()
     {
         Log.d(TAG, " resume");
+        if(mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            mediaPlayer.start();
+        }
     }
 
     public void pause()
     {
         Log.d(TAG, "pause");
+//        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+//            mediaPlayer.pause();
+//        }
+
     }
+
+    public MediaPlayer getMediaPlayer() {
+        return this.mediaPlayer;
+    }
+
 
     public void prev()
     {
@@ -65,10 +90,16 @@ public class PlayerController
     public void next()
     {
         Log.d(TAG, "next");
+
     }
 
     public void stop()
     {
+        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
         Log.d(TAG, "stop");
     }
 }

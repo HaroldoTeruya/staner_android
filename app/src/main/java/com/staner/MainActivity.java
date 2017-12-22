@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -298,6 +299,11 @@ public class MainActivity extends AppCompatActivity implements
     public void play(String playlistName, int musicId)
     {
         playerController.play(playlistName, musicId);
+        if(playerController.getMediaPlayer() != null) {
+            Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
+            i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playerController.getMediaPlayer().getAudioSessionId());
+            startActivityForResult(i, 11113);
+        }
     }
 
     @Override
@@ -464,6 +470,18 @@ public class MainActivity extends AppCompatActivity implements
     public List<List<MediaFileInfo>> getPlaylistList()
     {
         return playlistList;
+    }
+
+    public MediaFileInfo getMusicById(int id)
+    {
+        for( MediaFileInfo mediaFileInfo : musicList )
+        {
+            if( mediaFileInfo.getId() == id )
+            {
+                return mediaFileInfo;
+            }
+        }
+        return null;
     }
 
     //=================================================================================================
