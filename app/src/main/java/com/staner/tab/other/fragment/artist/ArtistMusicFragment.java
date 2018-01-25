@@ -4,7 +4,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.MediaFileInfo;
+import com.staner.tab.album.AlbumMusicFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ public class ArtistMusicFragment extends Fragment
 
     private MainActivity mainActivity;
     public static final String TAG = "ArtistMusicFragment";
+    private MusicListAdapter musicListAdapter = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -66,10 +71,11 @@ public class ArtistMusicFragment extends Fragment
 
         List<MediaFileInfo> mediaFileInfoList = populateMusicList(name);
 
-        setHeaderView(mediaFileInfoList.get(0).getFileAlbumArt(), name);
+        setHeaderView(mainActivity.getRawImageById(mediaFileInfoList.get(0).getId()), name);
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        listView.setAdapter(new MusicListAdapter(mediaFileInfoList));
+        musicListAdapter = new MusicListAdapter(mediaFileInfoList);
+        listView.setAdapter(musicListAdapter);
     }
 
     /*
@@ -94,7 +100,7 @@ public class ArtistMusicFragment extends Fragment
     }
 
 
-    private void setHeaderView(byte raw[], String name)
+    private void setHeaderView(byte raw[], final String name)
     {
         Bitmap image = null;
         if( raw == null )
@@ -103,8 +109,35 @@ public class ArtistMusicFragment extends Fragment
         }
         else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
-        ((ImageView) getView().findViewById(R.id.imageview)).setImageBitmap(image);
+        ImageView imageView = ((ImageView) getView().findViewById(R.id.imageview));
+        image = Util.getThumbnailFromImage(image);
+        imageView.setImageBitmap(image);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setAdjustViewBounds(true);
+
         ((TextView) getView().findViewById(R.id.textview)).setText(name);
+
+        // when clicked in the play/pause button in the header
+        getView().findViewById(R.id.play_button).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if( Util.togglePlayer(view) )
+                {
+                    mainActivity.play(name, -1);
+                }
+                else
+                {
+                    mainActivity.pause();
+                }
+            }
+        });
+    }
+
+    public void filter(String text)
+    {
+        musicListAdapter.filter(text);
     }
 
     //=================================================================================================
@@ -122,10 +155,14 @@ public class ArtistMusicFragment extends Fragment
     public class MusicListAdapter extends BaseAdapter
     {
         private List<MediaFileInfo> musicList;
+        private List<MediaFileInfo> filteredMusicList;
 
         public MusicListAdapter(List<MediaFileInfo> musicList)
         {
             this.musicList = musicList;
+
+            filteredMusicList = new ArrayList<>();
+            filteredMusicList.addAll(musicList);
         }
 
         public int getCount()
@@ -145,22 +182,72 @@ public class ArtistMusicFragment extends Fragment
 
         public View getView(int position, View convertView, ViewGroup parent)
         {
-            String name = musicList.get(position).getFileName();
-
-            byte raw[] = musicList.get(position).getFileAlbumArt();
+            final String name = musicList.get(position).getFileName();
+            final String albumName = musicList.get(position).getFileAlbumName();
+            final int id = musicList.get(position).getId();
+            byte raw[] = mainActivity.getRawImageById(id);
             Bitmap image = null;
             if( raw == null )
             {
                 image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.artist);
             }
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
+            image = Util.getThumbnailFromImage(image);
 
-            convertView = Util.inflate(mainActivity, R.layout.item_list_layout);
+            if( convertView == null )
+            {
+                convertView = Util.inflate(mainActivity, R.layout.item_list_layout);
+            }
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(Util.getThumbnailFromImage(image));
             ((TextView)convertView.findViewById(R.id.name_textview)).setText(name);
 
+            convertView.findViewById(R.id.menu_button).setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    createMusicPlaylistPopupMenu(name, view);
+                }
+            });
+
+            // when clicked in the music in the list
+            convertView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    mainActivity.play(albumName, id);
+                }
+            });
+
             return convertView;
+        }
+
+        public void createMusicPlaylistPopupMenu(final String name, View view)
+        {
+            PopupMenu popup = new PopupMenu(mainActivity, view);
+            popup.getMenuInflater().inflate(R.menu.album_music_options_menu, popup.getMenu());
+            popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+            {
+                @Override
+                public boolean onMenuItemClick(MenuItem item)
+                {
+                    if( item.getItemId() == R.id.add )
+                    {
+                        Log.d(TAG,"onAddToPlayListRequest: " + name);
+                        AlbumMusicFragment.AddToPlaylistDialogFragment.instantiate(name).show(getFragmentManager(), getResources().getString(R.string.add_to_playlist).toUpperCase());
+                    }
+                    return false;
+                }
+            });
+            popup.show();
+        }
+
+        public void filter(String text)
+        {
+            musicList = Util.filter(musicList, filteredMusicList, text);
+            notifyDataSetChanged();
         }
     }
 }

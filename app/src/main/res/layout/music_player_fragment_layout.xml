@@ -32,6 +32,7 @@
                     android:layout_marginLeft="@dimen/default_margin"
                     android:layout_marginRight="@dimen/default_margin"
                     android:src="@drawable/equalizer"/>
+
                 <ImageView
                     android:id="@+id/minimized_player_button"
                     android:layout_width="@dimen/default_icon_size"
@@ -176,9 +177,7 @@
                 android:id="@+id/art_imageview"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
-                android:scaleType="centerCrop"
-                android:src="@drawable/logo"/>
+                android:scaleType="centerCrop"/>
         </FrameLayout>
 
         <RelativeLayout

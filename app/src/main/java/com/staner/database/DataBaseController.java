@@ -53,8 +53,6 @@ public class DataBaseController extends SQLiteOpenHelper
     @Override
     public void onCreate(SQLiteDatabase db)
     {
-//        db.execSQL(DataBase.CREATE_TABLE_MUSIC);
-//        db.execSQL(DataBase.CREATE_TABLE_ALBUM);
         db.execSQL(DataBase.CREATE_TABLE_PLAYLIST);
         db.execSQL(DataBase.CREATE_TABLE_MUSIC_PLAYLIST);
     }
@@ -63,8 +61,6 @@ public class DataBaseController extends SQLiteOpenHelper
     public void onUpgrade(SQLiteDatabase db, int i, int i1)
     {
         // on upgrade drop older tables
-//        db.execSQL("DROP TABLE IF EXISTS " + DataBase.Music.TABLE_NAME);
-//        db.execSQL("DROP TABLE IF EXISTS " + DataBase.Album.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataBase.Playlist.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + DataBase.MusicPlaylist.TABLE_NAME);
 
@@ -203,87 +199,6 @@ public class DataBaseController extends SQLiteOpenHelper
         db.close();
     }
 
-    // get playlist model by name
-//    public PlaylistModel getPlaylistModelByName(String name)
-//    {
-//        List<PlaylistModel> playlistList = getPlaylistList();
-//        for( PlaylistModel playlistModel : playlistList )
-//        {
-//            if( playlistModel.getName().toLowerCase().equals(name.toLowerCase()) )
-//            {
-//                return playlistModel;
-//            }
-//        }
-//        return null;
-//    }
-
-    // MUSIC =======================================================================================
-    // get music music by id
-//    public MusicModel getMusicById(int id)
-//    {
-//        Log.d(TAG, "getMusicById " + id);
-//        MusicModel musicModel = new MusicModel();
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor cursor = db.rawQuery(DataBase.Music.SELECT + String.valueOf(id), null);
-//        if( cursor == null ) return null;
-//        if( cursor.moveToFirst() )
-//        {
-//            String name = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_NAME));
-//            String path = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_PATH));
-//            int duration = cursor.getInt(cursor.getColumnIndex(DataBase.Music.COLUMN_DURATION));
-//            int albumId = cursor.getInt(cursor.getColumnIndex(DataBase.Music.ALBUM_ID));
-//            String artist = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_ARTIST));
-//            String genre = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_GENRE));
-//
-//            musicModel.setId(id);
-//            musicModel.setName(name);
-//            musicModel.setAlbumId(albumId);
-//            musicModel.setDuration(duration);
-//            musicModel.setPath(path);
-//            musicModel.setArtist(artist);
-//            musicModel.setGenre(genre);
-//        }
-//        return musicModel;
-//    }
-//
-//    // get all music
-//    public List<MusicModel> getMusicList()
-//    {
-//        Log.d(TAG, "getMusicList");
-//        List<MusicModel> musicModelList = new ArrayList<>();
-//        SQLiteDatabase db = getReadableDatabase();
-//        Cursor cursor = db.rawQuery(DataBase.Music.SELECT_ALL, null);
-//        if( cursor == null ) return null;
-//        if( cursor.moveToFirst() )
-//        {
-//            while (!cursor.isAfterLast())
-//            {
-//                String name = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_NAME));
-//                String path = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_PATH));
-//                int duration = cursor.getInt(cursor.getColumnIndex(DataBase.Music.COLUMN_DURATION));
-//                int id = cursor.getInt(cursor.getColumnIndex(DataBase.Music.ID));
-//                int albumId = cursor.getInt(cursor.getColumnIndex(DataBase.Music.ALBUM_ID));
-//                String artist = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_ARTIST));
-//                String genre = cursor.getString(cursor.getColumnIndex(DataBase.Music.COLUMN_GENRE));
-//
-//                MusicModel musicModel = new MusicModel();
-//                musicModel.setId(id);
-//                musicModel.setName(name);
-//                musicModel.setAlbumId(albumId);
-//                musicModel.setDuration(duration);
-//                musicModel.setPath(path);
-//                musicModel.setArtist(artist);
-//                musicModel.setGenre(genre);
-//
-//                musicModelList.add(musicModel);
-//                cursor.moveToNext();
-//            }
-//        }
-//        cursor.close();
-//        db.close();
-//        return musicModelList;
-//    }
-
     // get all music from a playlist
     public List<MediaFileInfo> getMusicListByPLaylistId(int playlistId)
     {
@@ -327,32 +242,6 @@ public class DataBaseController extends SQLiteOpenHelper
         }
         return null;
     }
-
-//    // insert music
-//    private void insertMusic(MediaFileInfo mediaFileInfo, int albumId)
-//    {
-//        SQLiteDatabase db = getReadableDatabase();
-//
-//        String sql = DataBase.Music.insertOrIgnore(mediaFileInfo, albumId);
-//        SQLiteStatement sqLiteStatement = db.compileStatement(sql);
-//        sqLiteStatement.executeInsert();
-//
-//        db.close();
-//    }
-//
-//    // insert music playlist relationship
-//    public void insertMusicPlaylist(int musicId, int playlistId)
-//    {
-//        SQLiteDatabase db = getReadableDatabase();
-//
-//        ContentValues contentValues = new ContentValues();
-//        contentValues.put(DataBase.MusicPlaylist.Music_ID, musicId);
-//        contentValues.put(DataBase.MusicPlaylist.PLAYLIST_ID, playlistId);
-//
-//        long id = db.insert(DataBase.MusicPlaylist.TABLE_NAME, null, contentValues);
-//        db.close();
-//    }
-//
 
     // remove music playlist relationship
     public void removeMusicPlaylist(int id)

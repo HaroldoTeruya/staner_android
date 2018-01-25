@@ -10,7 +10,6 @@
 
     <ImageView
         android:id="@+id/imageview"
-        android:src="@drawable/logo"
         android:layout_width="@dimen/mini_cover_width"
         android:layout_height="@dimen/mini_cover_width"
         android:layout_marginRight="@dimen/half_margin"

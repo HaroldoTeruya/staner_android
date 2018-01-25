@@ -23,7 +23,6 @@
                 android:id="@+id/imageview"
                 android:layout_width="@dimen/cover_width"
                 android:layout_height="@dimen/cover_width"
-                android:scaleType="centerCrop"
                 android:src="@drawable/playlist"/>
 
             <TextView
@@ -61,7 +60,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/cancel"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_orange_dark"
+            android:background="@drawable/default_button_indicator"/>
 
         <Button
             android:id="@+id/confirm_button"
@@ -71,7 +72,9 @@
             android:layout_weight="1"
             android:gravity="center"
             android:text="@string/confirm"
-            android:textStyle="bold"/>
+            android:textStyle="bold"
+            android:textColor="@android:color/holo_orange_dark"
+            android:background="@drawable/default_button_indicator"/>
     </LinearLayout>
 
 </LinearLayout>

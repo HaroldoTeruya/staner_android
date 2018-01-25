@@ -2,6 +2,7 @@ package com.staner.tab.album;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -18,10 +20,12 @@ import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.AlbumModel;
 import com.staner.model.MediaFileInfo;
+import com.staner.tab.other.fragment.all.AllMusicPageFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by Teruya on 25/09/15.
@@ -34,6 +38,7 @@ public class AlbumTab implements TabHost.TabContentFactory
 
     private MainActivity mainActivity;
     public final static String TAG = "AlbumTab";
+    private AlbumAdapter albumAdapter;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -61,17 +66,25 @@ public class AlbumTab implements TabHost.TabContentFactory
         View view = Util.inflate(mainActivity, R.layout.album_tab_content_layout);
 
         GridView gridview = (GridView) view.findViewById(R.id.gridview);
-        gridview.setAdapter(new AlbumAdapter());
+        albumAdapter = new AlbumAdapter();
+        gridview.setAdapter(albumAdapter);
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener()
         {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l)
             {
                 Log.d(TAG, "onItemClick: " + view.getTag());
-                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.album_fragment_container, AlbumMusicFragment.instantiate(String.valueOf(view.getTag()))).addToBackStack(null).commit();
+                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.album_fragment_container, AlbumMusicFragment.instantiate(String.valueOf(view.getTag())), AlbumMusicFragment.TAG).addToBackStack(null).commit();
             }
         });
         return view;
+    }
+
+    public void filter(String text)
+    {
+        Fragment fragment = mainActivity.getSupportFragmentManager().findFragmentByTag(AlbumMusicFragment.TAG);
+        if( fragment != null ) ((AlbumMusicFragment)fragment).filter(text);
+        else albumAdapter.filter(text);
     }
 
     //=================================================================================================
@@ -89,10 +102,13 @@ public class AlbumTab implements TabHost.TabContentFactory
     public class AlbumAdapter extends BaseAdapter
     {
         private List<List<MediaFileInfo>> mediaFileCollectionList = null;
+        private List<List<MediaFileInfo>> filteredMediaFileCollectionList = null;
 
         public AlbumAdapter()
         {
+            filteredMediaFileCollectionList = new ArrayList<>();
             mediaFileCollectionList = new ArrayList<>();
+
             for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
             {
                 String name = mediaFileInfo.getFileAlbumName();
@@ -121,6 +137,8 @@ public class AlbumTab implements TabHost.TabContentFactory
                     }
                 }
             }
+
+            filteredMediaFileCollectionList.addAll(mediaFileCollectionList);
         }
 
         public int getCount()
@@ -142,21 +160,33 @@ public class AlbumTab implements TabHost.TabContentFactory
         public View getView(int position, View convertView, ViewGroup parent)
         {
             String name = mediaFileCollectionList.get(position).get(0).getFileAlbumName();
-
-            byte raw[] = mediaFileCollectionList.get(position).get(0).getFileAlbumArt();
+            int id = mediaFileCollectionList.get(position).get(0).getId();
+            byte raw[] = mainActivity.getRawImageById(id);
             Bitmap image = null;
             if( raw == null )
             {
                 image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.album);
             }
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
+            if(image != null) {
+                image = Util.getThumbnailFromImage(image);
+            }
 
-            convertView = Util.inflate(mainActivity, R.layout.cover_layout);
+            if( convertView == null )
+            {
+                convertView = Util.inflate(mainActivity, R.layout.cover_layout);
+            }
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(image);
             ((TextView)convertView.findViewById(R.id.textview)).setText(name);
 
             return convertView;
+        }
+
+        public void filter(String text)
+        {
+            mediaFileCollectionList = Util.filterPlaylist(mediaFileCollectionList, filteredMediaFileCollectionList, text);
+            notifyDataSetChanged();
         }
     }
 }

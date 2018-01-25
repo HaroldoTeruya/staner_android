@@ -4,8 +4,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.PopupMenu;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -15,11 +18,9 @@ import android.widget.TextView;
 
 import com.staner.MainActivity;
 import com.staner.R;
-import com.staner.database.DataBase;
 import com.staner.model.MediaFileInfo;
-import com.staner.tab.base.BaseFragment;
-import com.staner.tab.base.BaseListener;
-import com.staner.tab.other.fragment.artist.ArtistMusicFragment;
+import com.staner.model.MusicListAdapter;
+import com.staner.tab.album.AlbumMusicFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
@@ -37,6 +38,7 @@ public class AllMusicPageFragment extends Fragment
 
     private MainActivity mainActivity;
     public static final String TAG = "AllMusicPageFragment";
+    private MusicListAdapter musicListAdapter = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -59,7 +61,13 @@ public class AllMusicPageFragment extends Fragment
         super.onViewCreated(view, savedInstanceState);
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        listView.setAdapter(new MusicListAdapter(mainActivity.getMusicList()));
+        musicListAdapter = new MusicListAdapter(mainActivity, mainActivity.getMusicList());
+        listView.setAdapter(musicListAdapter);
+    }
+
+    public void filter(String text)
+    {
+        musicListAdapter.filter(text);
     }
 
     //=================================================================================================
@@ -73,49 +81,4 @@ public class AllMusicPageFragment extends Fragment
     //=================================================================================================
     //============================================== CLASS ============================================
     //=================================================================================================
-
-    public class MusicListAdapter extends BaseAdapter
-    {
-        private List<MediaFileInfo> musicList;
-
-        public MusicListAdapter(List<MediaFileInfo> musicList)
-        {
-            this.musicList = musicList;
-        }
-
-        public int getCount()
-        {
-            return musicList.size();
-        }
-
-        public MediaFileInfo getItem(int position)
-        {
-            return musicList.get(position);
-        }
-
-        public long getItemId(int position)
-        {
-            return position;
-        }
-
-        public View getView(int position, View convertView, ViewGroup parent)
-        {
-            String name = musicList.get(position).getFileName();
-
-            byte raw[] = musicList.get(position).getFileAlbumArt();
-            Bitmap image = null;
-            if( raw == null )
-            {
-                image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.music);
-            }
-            else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
-
-            convertView = Util.inflate(mainActivity, R.layout.item_list_layout);
-            convertView.setTag(name);
-            ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(Util.getThumbnailFromImage(image));
-            ((TextView)convertView.findViewById(R.id.name_textview)).setText(name);
-
-            return convertView;
-        }
-    }
 }

@@ -46,6 +46,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
     private byte art[] = null;
     private String name = "";
     private PlaylistTab.PLaylistInterface playlistInterface = null;
+    private MusicListAdapter musicListAdapter;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -86,7 +87,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         setHeaderView();
 
         ListView listView = (ListView) view.findViewById(R.id.listview);
-        MusicListAdapter musicListAdapter = new MusicListAdapter(mediaFileInfoList);
+        musicListAdapter = new MusicListAdapter(mediaFileInfoList);
         listView.setAdapter(musicListAdapter);
     }
 
@@ -117,7 +118,12 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         }
         else image = BitmapFactory.decodeByteArray(art, 0, art.length);
 
-        ((ImageView) getView().findViewById(R.id.imageview)).setImageBitmap(image);
+        ImageView imageView = ((ImageView) getView().findViewById(R.id.imageview));
+        image = Util.getThumbnailFromImage(image);
+        imageView.setImageBitmap(image);
+        imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
+        imageView.setAdjustViewBounds(true);
+
         ((TextView) getView().findViewById(R.id.textview)).setText(name);
 
         // when clicked in the play/pause button in the header
@@ -157,7 +163,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
     @Override
     public void onPlaylistCreated()
     {
-
+        Log.d(TAG, "empty");
     }
 
     @Override
@@ -207,36 +213,10 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         this.playlistInterface = playlistInterface;
     }
 
-//    @Override
-//    public void onPlaylistEdited()
-//    {
-//        MainActivity mainActivity = (MainActivity) getActivity();
-//        PlaylistModel playlistModel = mainActivity.getPlaylistById(id);
-//        ((ImageView)getView().findViewById(R.id.imageview)).setImageBitmap(playlistModel.getArt());
-//        ((TextView)getView().findViewById(R.id.textview)).setText(playlistModel.getName());
-//
-//        baseListener.onPlaylistEdited();
-//    }
-//
-//    @Override
-//    public void onPlaylistRemoved(int id)
-//    {
-//        // updating the PlaylistTab
-//        baseListener.onPlaylistRemoved(id);
-//
-//        // returning to the PlaylistTab
-//        getActivity().getSupportFragmentManager().popBackStackImmediate();
-//    }
-//
-//    @Override
-//    public void onRemoveMusicFromPlaylistListener(int musicId)
-//    {
-//        Log.d(TAG, "onRemoveMusicFromPlaylistListener " + id + " " + musicId);
-//
-//        itemArray.remove(getItemById(musicId));
-//        dragListView.getAdapter().notifyDataSetChanged();
-//        ((MainActivity)getActivity()).removeMusicFromPlaylist(id, musicId);
-//    }
+    public void filter(String text)
+    {
+        musicListAdapter.filter(text);
+    }
 
     //=================================================================================================
     //============================================== EVENTS ===========================================
@@ -252,15 +232,20 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
 
     public class MusicListAdapter extends BaseAdapter
     {
-        private List<MediaFileInfo> musicList = new ArrayList<>();
+        private List<MediaFileInfo> musicList;
+        private List<MediaFileInfo> filteredMusicList;
 
         public MusicListAdapter(List<MediaFileInfo> musicList)
         {
+            this.musicList = new ArrayList<>();
             int size = musicList.size();
             for( int i = 1; i < size; i++ )
             {
                 this.musicList.add(musicList.get(i));
             }
+
+            filteredMusicList = new ArrayList<>();
+            filteredMusicList.addAll(this.musicList);
         }
 
         public int getCount()
@@ -281,16 +266,21 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         public View getView(int position, View convertView, ViewGroup parent)
         {
             final String name = musicList.get(position).getFileName();
-
-            byte raw[] = musicList.get(position).getFileAlbumArt();
+            final String playlistName = musicList.get(position).getFilePlaylist();
+            final int id = musicList.get(position).getId();
+            byte raw[] = mainActivity.getRawImageById(id);
             Bitmap image = null;
             if( raw == null )
             {
                 image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.music);
             }
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
+            image = Util.getThumbnailFromImage(image);
 
-            convertView = Util.inflate(mainActivity, R.layout.item_list_layout);
+            if( convertView == null )
+            {
+                convertView = Util.inflate(mainActivity, R.layout.item_list_layout);
+            }
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(Util.getThumbnailFromImage(image));
             ((TextView)convertView.findViewById(R.id.name_textview)).setText(name);
@@ -300,6 +290,15 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
                 public void onClick(View view)
                 {
                     createMusicPlaylistPopupMenu(name, view);
+                }
+            });
+
+            convertView.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View view)
+                {
+                    mainActivity.play(playlistName, id);
                 }
             });
 
@@ -345,6 +344,12 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
                 }
             });
             popup.show();
+        }
+
+        public void filter(String text)
+        {
+            musicList = Util.filter(musicList, filteredMusicList, text);
+            notifyDataSetChanged();
         }
     }
 

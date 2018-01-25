@@ -20,7 +20,7 @@
         android:layout_height="@dimen/status_bar_album_art"
         android:layout_marginLeft="@dimen/half_margin"
         android:gravity="center"
-        android:src="@drawable/logo"
+        android:src="@drawable/logo_staner192"
         android:visibility="gone"/>
 
     <LinearLayout

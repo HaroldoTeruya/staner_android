@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.provider.MediaStore;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.SearchView;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -23,10 +24,13 @@ import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TabHost;
 
 import com.staner.database.DataBaseController;
+import com.staner.model.ImageModel;
 import com.staner.model.MediaFileInfo;
 import com.staner.model.PlaylistModel;
 import com.staner.music.player.NotificationPlayerService;
@@ -73,11 +77,17 @@ public class MainActivity extends AppCompatActivity implements
     // the entire data
     private List<MediaFileInfo> musicList = new ArrayList<>();
     private List<List<MediaFileInfo>> playlistList = new ArrayList<>();
+    private List<ImageModel> imageModelList = new ArrayList<>();
 
     // dialog fragment used to load image from th gallery
     private DialogFragment dialogFragment = null;
 
     private PlayerController playerController = null;
+
+    // the tabs
+    private AlbumTab albumTab;
+    private PlaylistTab playlistTab;
+    private OtherTab otherTab;
 
     /**
      * This service is responsible to connect and disconnect the notification player music.
@@ -117,6 +127,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_layout);
 
+        getSupportActionBar().hide();
+
+        // used to load all the data. When the loading process is finished, the createTab is called
         getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, new SplashScreenFragment()).addToBackStack(SplashScreenFragment.TAG).commit();
 
         playerController = new PlayerController(this);
@@ -155,9 +168,37 @@ public class MainActivity extends AppCompatActivity implements
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.options_menu, menu);
 
+        // associate searchable configuration with the SearchView
         SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView = (SearchView) menu.findItem(R.id.search).getActionView();
         searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener()
+        {
+            @Override
+            public boolean onQueryTextSubmit(String query)
+            {
+                Log.d(TAG,query);
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String text)
+            {
+                switch ( currentTab )
+                {
+                    case 0:
+                        albumTab.filter(text);
+                        break;
+                    case 1:
+                        playlistTab.filter(text);
+                        break;
+                    case 2:
+                        otherTab.filter(text);
+                        break;
+                }
+                return false;
+            }
+        });
 
         return true;
     }
@@ -176,28 +217,46 @@ public class MainActivity extends AppCompatActivity implements
      */
     public void createTab(List<MediaFileInfo> mediaFileInfoList, List<List<MediaFileInfo>> playlistList)
     {
-        setMusicList(mediaFileInfoList);
-        setPlaylistList(playlistList);
+        getSupportActionBar().show();
+
+        this.musicList = mediaFileInfoList;
+        this.playlistList = playlistList;
+
+        for (MediaFileInfo mediaFileInfo : musicList)
+        {
+            imageModelList.add(new ImageModel(mediaFileInfo.getFileAlbumArt(), mediaFileInfo.getId()));
+            mediaFileInfo.setFileAlbumArt(null);
+        }
+        for (List<MediaFileInfo> playlist : playlistList)
+        {
+            for (int i = 1; i < playlist.size(); i++)
+            {
+                playlist.get(i).setFileAlbumArt(null);
+            }
+        }
 
         tabHost = (TabHost) findViewById(android.R.id.tabhost);
         tabHost.setup();
 
-        TabHost.TabSpec albumTab = tabHost.newTabSpec("1");
-        TabHost.TabSpec playlistTab = tabHost.newTabSpec("2");
-        TabHost.TabSpec otherTab = tabHost.newTabSpec("3");
+        TabHost.TabSpec albumTabSpec = tabHost.newTabSpec("1");
+        TabHost.TabSpec playlistTabSpec = tabHost.newTabSpec("2");
+        TabHost.TabSpec otherTabSpec = tabHost.newTabSpec("3");
 
-        albumTab.setIndicator(AlbumTab.tabHeader(this));
-        albumTab.setContent(new AlbumTab(this));
+        albumTabSpec.setIndicator(AlbumTab.tabHeader(this));
+        albumTab = new AlbumTab(this);
+        albumTabSpec.setContent(albumTab);
 
-        playlistTab.setIndicator(PlaylistTab.tabHeader(this));
-        playlistTab.setContent(new PlaylistTab(this));
+        playlistTabSpec.setIndicator(PlaylistTab.tabHeader(this));
+        playlistTab = new PlaylistTab(this);
+        playlistTabSpec.setContent(playlistTab);
 
-        otherTab.setIndicator(OtherTab.tabHeader(this));
-        otherTab.setContent(new OtherTab(this));
+        otherTabSpec.setIndicator(OtherTab.tabHeader(this));
+        otherTab = new OtherTab(this);
+        otherTabSpec.setContent(otherTab);
 
-        tabHost.addTab(albumTab);
-        tabHost.addTab(playlistTab);
-        tabHost.addTab(otherTab);
+        tabHost.addTab(albumTabSpec);
+        tabHost.addTab(playlistTabSpec);
+        tabHost.addTab(otherTabSpec);
         tabHost.setOnTabChangedListener(this);
 
         this.previousView = tabHost.getCurrentView();
@@ -212,11 +271,17 @@ public class MainActivity extends AppCompatActivity implements
         currentView = tabHost.getCurrentView();
         if (tabHost.getCurrentTab() > currentTab)
         {
+            if( tabHost.getCurrentTab() == 1) albumTab.filter("");
+            else if( tabHost.getCurrentTab() == 2  ) playlistTab.filter("");
+
             previousView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
             currentView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
         }
         else
         {
+            if( tabHost.getCurrentTab() == 1 ) playlistTab.filter("");
+            else if( tabHost.getCurrentTab() == 2 ) otherTab.filter("");
+
             previousView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
             currentView.setAnimation(setProperties(new TranslateAnimation(Animation.RELATIVE_TO_PARENT, -1.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f, Animation.RELATIVE_TO_PARENT, 0.0f)));
         }
@@ -238,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void startService()
     {
-        // if( ) we have to put a condition here, startService only if we have a song playing.
+        // TODO if( ) we have to put a condition here, startService only if we have a song playing.
         {
             Intent serviceIntent = new Intent(MainActivity.this, NotificationPlayerService.class);
             bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -284,8 +349,9 @@ public class MainActivity extends AppCompatActivity implements
                 {
                     ImageView imageView = ((ImageView)dialogFragment.getView().findViewById(R.id.imageview));
                     imageView.setTag(chosenImageUri);
+                    imageView.setImageBitmap(Util.scaleImage(bitmap, 600));
                     imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-                    imageView.setImageBitmap(Util.getThumbnailFromImage(bitmap));
+                    imageView.setAdjustViewBounds(true);
                 }
             }
             catch (IOException e)
@@ -336,6 +402,9 @@ public class MainActivity extends AppCompatActivity implements
         playerController.stop();
     }
 
+    @Override
+    public void close(){ playerController.stop(); finish();  }
+
     /**
      * Return the music object by name.
      *
@@ -362,8 +431,10 @@ public class MainActivity extends AppCompatActivity implements
      */
     public List<MediaFileInfo> getPlaylistByName(String name)
     {
-        for( List<MediaFileInfo> mediaFileInfoList : playlistList )
+        Log.d("list", this.playlistList.toString());
+        for( List<MediaFileInfo> mediaFileInfoList : this.playlistList )
         {
+            Log.d("MEDIAFILEINFO", "" + mediaFileInfoList.get(0).getFilePlaylist());
             if( mediaFileInfoList.get(0).getFilePlaylist().equalsIgnoreCase(name))
             {
                 return mediaFileInfoList;
@@ -452,16 +523,6 @@ public class MainActivity extends AppCompatActivity implements
         return musicList;
     }
 
-    public void setMusicList(List<MediaFileInfo> musicList)
-    {
-        this.musicList = musicList;
-    }
-
-    public void setPlaylistList(List<List<MediaFileInfo>> playlistList)
-    {
-        this.playlistList = playlistList;
-    }
-
     public void addPlaylist(List<MediaFileInfo> mediaFileInfoList)
     {
         this.playlistList.add(mediaFileInfoList);
@@ -479,6 +540,18 @@ public class MainActivity extends AppCompatActivity implements
             if( mediaFileInfo.getId() == id )
             {
                 return mediaFileInfo;
+            }
+        }
+        return null;
+    }
+
+    public byte[] getRawImageById(int id)
+    {
+        for (ImageModel imageModel : imageModelList)
+        {
+            if( imageModel.getId() == id )
+            {
+                return imageModel.getRawImage();
             }
         }
         return null;

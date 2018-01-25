@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.staner.MainActivity;
+import com.staner.PlayerController;
 import com.staner.R;
 
 /**
@@ -108,6 +109,8 @@ public class NotificationPlayerService extends Service
 
             stopForeground(true);
             stopSelf();
+
+            notificationPlayerServiceListener.close();
         }
 
         // return default value
@@ -118,13 +121,13 @@ public class NotificationPlayerService extends Service
     {
         if( play )
         {
-            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
-            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
+            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
+            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
         }
         else
         {
-            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
-            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_play);
+            views.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
+            bigViews.setImageViewResource(R.id.status_bar_play, R.drawable.apollo_holo_dark_pause);
         }
 
         notification.contentView = views;
@@ -189,7 +192,7 @@ public class NotificationPlayerService extends Service
         notification.contentView = views;
         notification.bigContentView = bigViews;
         notification.flags = Notification.FLAG_ONGOING_EVENT;
-        notification.icon = R.drawable.logo;
+        notification.icon = R.drawable.logo_staner72;
         notification.contentIntent = pendingIntent;
 
         startForeground(Constants.NOTIFICATION_ID.FOREGROUND_SERVICE, notification);
@@ -237,7 +240,7 @@ public class NotificationPlayerService extends Service
             BitmapFactory.Options options = new BitmapFactory.Options();
             try
             {
-                bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.default_album_art, options);
+                bm = BitmapFactory.decodeResource(context.getResources(), R.drawable.logo_staner192, options);
             }
             catch (Error ee)
             {
@@ -274,5 +277,7 @@ public class NotificationPlayerService extends Service
         void next();
 
         void stop();
+
+        void close();
     }
 }
