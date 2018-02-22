@@ -41,7 +41,7 @@ public final class DataBase
     public static final String DATABASE_NAME = "staner";
 
     // If you change the database schema, you must increment the database version.
-    public static final int DATABASE_VERSION = 16;
+    public static final int DATABASE_VERSION = 17;
 
     /*
      * id INT

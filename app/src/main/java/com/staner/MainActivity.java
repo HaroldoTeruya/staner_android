@@ -177,7 +177,6 @@ public class MainActivity extends AppCompatActivity implements
             @Override
             public boolean onQueryTextSubmit(String query)
             {
-                Log.d(TAG,query);
                 return false;
             }
 
@@ -365,6 +364,7 @@ public class MainActivity extends AppCompatActivity implements
     public void play(String playlistName, int musicId)
     {
         playerController.play(playlistName, musicId);
+
         if(playerController.getMediaPlayer() != null) {
             Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
             i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playerController.getMediaPlayer().getAudioSessionId());

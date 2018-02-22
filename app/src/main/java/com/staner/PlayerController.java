@@ -30,7 +30,7 @@ public class PlayerController
     private int currentId = -1;
     private int prevId = -1;
     private int nextId = -1;
-    private ArrayList<MediaFileInfo> playlist;
+    private List<MediaFileInfo> playlist;
     private PlayerFragment playerFragment = null;
 
     //=================================================================================================
@@ -47,33 +47,133 @@ public class PlayerController
     //============================================= METHODS ===========================================
     //=================================================================================================
 
-    public void play(String playlistName, int musicId) {
-        Log.d(TAG, playlistName + " " + musicId + " play");
-        this.stop();
-        if(playlistName.compareTo(this.playlistName) != -1) { //new playlist! So update the current playlist!
-//            this.playlist = new ArrayList<>(mainActivity.getPlaylistByName(playlistName));
-            Log.d("uË", ""+ mainActivity.getPlaylistByName(playlistName).get(0).getId());
-            this.playlistName = playlistName;
+    public void populatePlaylist(String playlistName)
+    {
+        playlist = new ArrayList<>();
+        for( List<MediaFileInfo> mediaFileInfoList : mainActivity.getPlaylistList() )
+        {
+//            Log.d(TAG, mediaFileInfoList.get(0).getFilePlaylist());
+            if( mediaFileInfoList.get(0).getFilePlaylist() == playlistName )
+            {
+                for ( MediaFileInfo mediaFileInfo : mediaFileInfoList )
+                {
+                    if ( !mediaFileInfo.getFilePath().isEmpty() )
+                    {
+                        playlist.add(mediaFileInfo);
+                    }
+                }
+            }
         }
-        if(musicId == -1) { //if is -1 then get the first one in the currentplaylist
-            this.currentId = this.playlist.get(0).getId();
-        }
-        else { //if not just get the song passed
-            this.currentId = musicId;
-        }
-        mediaPlayer = new MediaPlayer();
 
+        if ( playlist.isEmpty() )
+        {
+            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
+            {
+                if( !mediaFileInfo.getFileAlbumName().isEmpty() && mediaFileInfo.getFileAlbumName().equalsIgnoreCase(playlistName) )
+                {
+                    playlist.add(mediaFileInfo);
+                }
+            }
+        }
+
+        if ( playlist.isEmpty() )
+        {
+            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
+            {
+                if( !mediaFileInfo.getFileArtist().isEmpty() && mediaFileInfo.getFileArtist().equalsIgnoreCase(playlistName) )
+                {
+                    playlist.add(mediaFileInfo);
+                }
+            }
+        }
+
+        if ( playlist.isEmpty() )
+        {
+            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
+            {
+                if( !mediaFileInfo.getFileGenre().isEmpty() && mediaFileInfo.getFileGenre().equalsIgnoreCase(playlistName) )
+                {
+                    playlist.add(mediaFileInfo);
+                }
+            }
+        }
+
+        if ( playlist.isEmpty() )
+        {
+            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
+            {
+                if( !mediaFileInfo.getFileType().isEmpty() && mediaFileInfo.getFileType().equalsIgnoreCase(playlistName) )
+                {
+                    playlist.add(mediaFileInfo);
+                }
+            }
+        }
+
+        if ( playlist.isEmpty() )
+        {
+            playlist = mainActivity.getMusicList();
+        }
+    }
+
+    public MediaFileInfo getMusic(int id)
+    {
+        for( MediaFileInfo mediaFileInfo : playlist )
+        {
+//            Log.d(TAG, mediaFileInfo.getId() + " " + id);
+            if( mediaFileInfo.getId() == id )
+            {
+                return mediaFileInfo;
+            }
+        }
+        return null;
+    }
+
+    public void play(String playlistName, int musicId)
+    {
+        Log.d(TAG, playlistName + " " + musicId + " play");
+
+        populatePlaylist(playlistName);
+
+        MediaFileInfo currentMediaFileInfo = null;
+        if( musicId != -1 )
+        {
+            currentMediaFileInfo = getMusic(musicId);
+        }
+        else
+        {
+            currentMediaFileInfo = playlist.get(0);
+        }
+
+        if ( currentMediaFileInfo == null )
+        {
+            Log.d(TAG, "error on search music");
+            return;
+        }
+
+        this.stop();
+
+        // for test
+//        for( MediaFileInfo mediaFileInfo : playlist )
+//        {
+//            Log.d(TAG, mediaFileInfo.getFileName());
+//        }
+
+        mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+        mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
+        {
             @Override
-            public void onPrepared(MediaPlayer mediaPlayer) {
+            public void onPrepared(MediaPlayer mediaPlayer)
+            {
                 mediaPlayer.start();
             }
         });
-        try {
-            mediaPlayer.setDataSource(mainActivity.getMusicById(this.currentId).getFilePath());
+        try
+        {
+            mediaPlayer.setDataSource(currentMediaFileInfo.getFilePath());
             mediaPlayer.prepareAsync();
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
 
