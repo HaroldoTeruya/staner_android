@@ -4,8 +4,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
-import android.util.Pair;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,9 +14,8 @@ import android.widget.TextView;
 import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.tab.album.AlbumMusicFragment;
-import com.staner.tab.base.BaseListener;
 import com.staner.util.Util;
-import com.woxthebox.draglistview.DragItemAdapter;
+
 
 import java.util.ArrayList;
 import java.util.List;

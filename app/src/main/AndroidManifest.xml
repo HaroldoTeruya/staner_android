@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest package="com.staner"
-          xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest
+    package="com.staner"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -9,8 +10,10 @@
         android:allowBackup="true"
         android:icon="@drawable/logo_staner192"
         android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:configChanges="orientation|keyboardHidden|screenSize">
 
         <activity
             android:name=".MainActivity"
