@@ -19,7 +19,6 @@ import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.MediaFileInfo;
 import com.staner.tab.album.AlbumMusicFragment;
-import com.staner.tab.other.fragment.artist.ArtistMusicFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
@@ -116,7 +115,7 @@ public class GenreMusicFragment extends Fragment
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setAdjustViewBounds(true);
 
-        ((TextView) getView().findViewById(R.id.textview)).setText(name);
+        ((TextView) getView().findViewById(R.id.album_name_textview)).setText(name);
 
         // when clicked in the play/pause button in the header
         getView().findViewById(R.id.play_button).setOnClickListener(new View.OnClickListener()

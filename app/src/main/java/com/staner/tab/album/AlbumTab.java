@@ -12,20 +12,16 @@ import android.widget.BaseAdapter;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.staner.MainActivity;
 import com.staner.R;
-import com.staner.model.AlbumModel;
 import com.staner.model.MediaFileInfo;
-import com.staner.tab.other.fragment.all.AllMusicPageFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Teruya on 25/09/15.
@@ -178,7 +174,7 @@ public class AlbumTab implements TabHost.TabContentFactory
             }
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(image);
-            ((TextView)convertView.findViewById(R.id.textview)).setText(name);
+            ((TextView)convertView.findViewById(R.id.album_name_textview)).setText(name);
 
             return convertView;
         }

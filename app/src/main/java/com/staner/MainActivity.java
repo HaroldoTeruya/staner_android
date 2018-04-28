@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
+import android.media.MediaPlayer;
 import android.media.audiofx.AudioEffect;
 import android.net.Uri;
 import android.os.Bundle;
@@ -302,7 +303,7 @@ public class MainActivity extends AppCompatActivity implements
 
     public void startService()
     {
-        // TODO if( ) we have to put a condition here, startService only if we have a song playing.
+//         TODO if( ) we have to put a condition here, startService only if we have a song playing.
         {
             Intent serviceIntent = new Intent(MainActivity.this, NotificationPlayerService.class);
             bindService(serviceIntent, serviceConnection, Context.BIND_AUTO_CREATE);
@@ -364,12 +365,6 @@ public class MainActivity extends AppCompatActivity implements
     public void play(String playlistName, int musicId)
     {
         playerController.play(playlistName, musicId);
-
-        if(playerController.getMediaPlayer() != null) {
-            Intent i = new Intent(AudioEffect.ACTION_DISPLAY_AUDIO_EFFECT_CONTROL_PANEL);
-            i.putExtra(AudioEffect.EXTRA_AUDIO_SESSION, playerController.getMediaPlayer().getAudioSessionId());
-            startActivityForResult(i, 11113);
-        }
     }
 
     @Override
@@ -402,8 +397,16 @@ public class MainActivity extends AppCompatActivity implements
         playerController.stop();
     }
 
+    public void seekTo(int msecs) {
+        playerController.seekTo(msecs);
+    }
+
     @Override
     public void close(){ playerController.stop(); finish();  }
+
+    public MediaPlayer getNediaPlayer() {
+        return playerController.getMediaPlayer();
+    }
 
     /**
      * Return the music object by name.

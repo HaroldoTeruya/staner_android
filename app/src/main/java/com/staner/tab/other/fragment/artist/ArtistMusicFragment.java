@@ -115,7 +115,7 @@ public class ArtistMusicFragment extends Fragment
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setAdjustViewBounds(true);
 
-        ((TextView) getView().findViewById(R.id.textview)).setText(name);
+        ((TextView) getView().findViewById(R.id.album_name_textview)).setText(name);
 
         // when clicked in the play/pause button in the header
         getView().findViewById(R.id.play_button).setOnClickListener(new View.OnClickListener()

@@ -124,7 +124,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setAdjustViewBounds(true);
 
-        ((TextView) getView().findViewById(R.id.textview)).setText(PlaylistMusicFragment.this.name);
+        ((TextView) getView().findViewById(R.id.album_name_textview)).setText(PlaylistMusicFragment.this.name);
 
         // when clicked in the play/pause button in the header
         getView().findViewById(R.id.play_button).setOnClickListener(new View.OnClickListener()
@@ -419,7 +419,7 @@ public class PlaylistMusicFragment extends Fragment implements BaseListener
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
             ((ImageView)view.findViewById(R.id.imageview)).setImageBitmap(image);
-            ((TextView)view.findViewById(R.id.textview)).setText(playlist.get(0).getFilePlaylist());
+            ((TextView)view.findViewById(R.id.album_name_textview)).setText(playlist.get(0).getFilePlaylist());
             view.setOnClickListener(new View.OnClickListener()
             {
                 @Override

@@ -98,18 +98,26 @@ public class SplashScreenFragment extends Fragment
 
             final String where = MediaStore.Audio.Media.IS_MUSIC + "=1";
             final Cursor cursor = getActivity().getContentResolver().query(uri, cursor_cols, where, null, null);
-            if( cursor.moveToFirst() )
+            if(cursor != null && cursor.moveToFirst())
             {
                 while (cursor.moveToNext())
                 {
                     String fileAlbumName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.ALBUM));
                     String fileName = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.TITLE));
                     String filePath = cursor.getString(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DATA));
+
                     int id = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media._ID));
                     int duration = cursor.getInt(cursor.getColumnIndexOrThrow(MediaStore.Audio.Media.DURATION));
-
+                    Log.d("FILEPATH ", filePath);
+                    if(filePath == null || filePath.isEmpty()) {
+                        return null;
+                    }
                     MediaMetadataRetriever mediaMetadataRetriever = new MediaMetadataRetriever();
-                    mediaMetadataRetriever.setDataSource(filePath);
+                    try {
+                        mediaMetadataRetriever.setDataSource(filePath);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                     byte[] fileAlbumArt = mediaMetadataRetriever.getEmbeddedPicture();
                     String fileGenre = mediaMetadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_GENRE);
                     if( fileGenre == null )

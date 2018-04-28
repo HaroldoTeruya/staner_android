@@ -59,7 +59,7 @@ public class OtherCoverAdapter extends BaseAdapter
             coverView = Util.inflate(mainActivity, R.layout.cover_layout);
             coverView.setId(albumModelList.get(position).getId());
             ((ImageView)coverView.findViewById(R.id.imageview)).setImageBitmap(getCoverImage(albumModelList.get(position).getArt()));
-            ((TextView)coverView.findViewById(R.id.textview)).setText(albumModelList.get(position).getName());
+            ((TextView)coverView.findViewById(R.id.album_name_textview)).setText(albumModelList.get(position).getName());
         }
         else
         {

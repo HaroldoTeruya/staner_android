@@ -22,12 +22,10 @@ import android.widget.TextView;
 import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.MediaFileInfo;
-import com.staner.model.PlaylistModel;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Created by Teruya on 26/04/17.
@@ -119,7 +117,7 @@ public class AlbumMusicFragment extends Fragment
         imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
         imageView.setAdjustViewBounds(true);
 
-        ((TextView) getView().findViewById(R.id.textview)).setText(name);
+        ((TextView) getView().findViewById(R.id.album_name_textview)).setText(name);
 
         // when clicked in the play/pause button in the header
         getView().findViewById(R.id.play_button).setOnClickListener(new View.OnClickListener()
@@ -325,7 +323,7 @@ public class AlbumMusicFragment extends Fragment
             else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
             ((ImageView)view.findViewById(R.id.imageview)).setImageBitmap(image);
-            ((TextView)view.findViewById(R.id.textview)).setText(playlist.get(0).getFilePlaylist());
+            ((TextView)view.findViewById(R.id.album_name_textview)).setText(playlist.get(0).getFilePlaylist());
             view.setOnClickListener(new View.OnClickListener()
             {
                 @Override

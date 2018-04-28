@@ -8,6 +8,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import com.staner.model.MediaFileInfo;
 
@@ -27,11 +28,12 @@ public class PlayerController
     public static final String TAG = PlayerController.class.getName();
 
     private String playlistName = "";
-    private int currentId = -1;
-    private int prevId = -1;
-    private int nextId = -1;
+    private int currentIndex = 0;
     private List<MediaFileInfo> playlist;
     private PlayerFragment playerFragment = null;
+    private Thread thread = null;
+    private String playerState = "stopped";
+    private MediaFileInfo currentMediaFileInfo;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -131,10 +133,10 @@ public class PlayerController
     public void play(String playlistName, int musicId)
     {
         Log.d(TAG, playlistName + " " + musicId + " play");
+        if(this.playlistName != playlistName) {
+            populatePlaylist(playlistName);
+        }
 
-        populatePlaylist(playlistName);
-
-        MediaFileInfo currentMediaFileInfo = null;
         if( musicId != -1 )
         {
             currentMediaFileInfo = getMusic(musicId);
@@ -152,22 +154,32 @@ public class PlayerController
 
         this.stop();
 
-        // for test
-//        for( MediaFileInfo mediaFileInfo : playlist )
-//        {
-//            Log.d(TAG, mediaFileInfo.getFileName());
-//        }
-
         mediaPlayer = new MediaPlayer();
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                next();
+            }
+        });
         mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener()
         {
             @Override
             public void onPrepared(MediaPlayer mediaPlayer)
             {
+                playerFragment.getMusicProgressBar().setMax(mediaPlayer.getDuration());
+                String duration = String.format("%d:%02d",
+                        TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()),
+                        TimeUnit.MILLISECONDS.toSeconds(mediaPlayer.getDuration()) -
+                                TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(mediaPlayer.getDuration()))
+                );
+                playerFragment.getDurationTextView().setText(duration);
+                playerState = "playing";
                 mediaPlayer.start();
+                observeMediaPlayerProgress();
             }
         });
+
         try
         {
             mediaPlayer.setDataSource(currentMediaFileInfo.getFilePath());
@@ -176,14 +188,20 @@ public class PlayerController
         {
             e.printStackTrace();
         }
+        if(playerFragment == null) {
+            playerFragment = new PlayerFragment();
+            playerFragment.setCurrentMedia(currentMediaFileInfo);
+            mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
+        } else {
+            playerFragment.setMediaInfo(currentMediaFileInfo);
+            if(!this.playlistName.equals(playlistName)) {
+                playerFragment.setCurrentMedia(currentMediaFileInfo);
+                this.playlistName = playlistName;
+                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
+            }
+        }
+        playerFragment.setMediaPlayer(mediaPlayer);
 
-        playerFragment = new PlayerFragment();
-
-        // use with responsibility
-        // playerFragment.loadMediaFileInfo(); // load in the fragment the media file info
-        // playerFragment.setTimeTrack();      // set time track if has a music playing
-
-        mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
     }
 
 
@@ -191,16 +209,19 @@ public class PlayerController
     {
         Log.d(TAG, " resume");
         if(mediaPlayer != null && !mediaPlayer.isPlaying()) {
+            playerState = "playing";
             mediaPlayer.start();
+            this.observeMediaPlayerProgress();
         }
     }
 
     public void pause()
     {
         Log.d(TAG, "pause");
-//        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-//            mediaPlayer.pause();
-//        }
+        if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            playerState = "paused";
+            mediaPlayer.pause();
+        }
 
     }
 
@@ -211,23 +232,97 @@ public class PlayerController
 
     public void prev()
     {
-        Log.d(TAG, "prev");
+       if(mediaPlayer.getCurrentPosition() >= 3000) {
+           this.seekTo(0);
+       } else {
+           currentIndex--;
+           if(currentIndex < 0) {
+               currentIndex = 0;
+           } else if(currentIndex >= 0) {
+           playerState = "prev-song";
+               stop();
+               play(this.playlistName, playlist.get(currentIndex).getId());
+           }
+       }
     }
 
     public void next()
     {
-        Log.d(TAG, "next");
-
+        currentIndex++;
+        if(currentIndex >= playlist.size()) {
+            currentIndex = playlist.size() - 1;
+        } else if(currentIndex < playlist.size()) {
+            playerState = "next-song";
+            stop();
+            play(this.playlistName, playlist.get(currentIndex).getId());
+        }
     }
 
     public void stop()
     {
         if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+            mediaPlayer.pause();
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
+            playerState = "stopped";
+        }
+        if(this.thread != null && this.thread.isAlive()) {
+            this.thread.interrupt();
+            this.thread = null;
         }
         Log.d(TAG, "stop");
+
+    }
+
+    public void seekTo(int msecs) {
+        if(mediaPlayer != null) {
+            mediaPlayer.seekTo(msecs);
+            setTimeTrack(msecs);
+        }
+    }
+
+    public void observeMediaPlayerProgress() {
+        this.thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Log.d(TAG, "run: " + playerState);
+                while (mediaPlayer != null && playerState.equalsIgnoreCase("playing")) {
+                    if(mediaPlayer != null && mediaPlayer.isPlaying()) {
+                        Log.d(TAG, "run: ");
+                        setTimeTrack(mediaPlayer.getCurrentPosition());
+                    }
+                    try {
+                        Thread.sleep(300);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+        this.thread.start();
+    }
+
+
+    public void setTimeTrack(int time)
+    {
+        final int _time = time;
+        final String _progressStr = String.format("%d:%02d",
+                TimeUnit.MILLISECONDS.toMinutes(time),
+                TimeUnit.MILLISECONDS.toSeconds(time) -
+                        TimeUnit.MINUTES.toSeconds(TimeUnit.MILLISECONDS.toMinutes(time))
+        );
+        try {
+            playerFragment.getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    playerFragment.getProgressTextView().setText(_progressStr);
+                    playerFragment.getMusicProgressBar().setProgress(_time);
+                }
+            });
+        } catch(NullPointerException e) {
+            Log.d(TAG, "setTimeTrack: " + e);
+        }
     }
 
     //=================================================================================================

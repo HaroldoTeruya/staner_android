@@ -90,7 +90,7 @@ public class AddToPlaylistDialogFragment extends DialogFragment
         else image = BitmapFactory.decodeByteArray(raw, 0, raw.length);
 
         ((ImageView)view.findViewById(R.id.imageview)).setImageBitmap(Util.getThumbnailFromImage(image));
-        ((TextView)view.findViewById(R.id.textview)).setText(playlist.get(0).getFilePlaylist());
+        ((TextView)view.findViewById(R.id.album_name_textview)).setText(playlist.get(0).getFilePlaylist());
         view.setOnClickListener(onPlaylistItemClickListener);
         return view;
     }

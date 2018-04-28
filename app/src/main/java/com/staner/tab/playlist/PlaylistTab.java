@@ -2,10 +2,8 @@ package com.staner.tab.playlist;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -21,7 +19,6 @@ import com.staner.R;
 import com.staner.database.DataBaseController;
 import com.staner.model.MediaFileInfo;
 import com.staner.model.PlaylistModel;
-import com.staner.tab.album.AlbumMusicFragment;
 import com.staner.tab.base.BaseListener;
 import com.staner.tab.playlist.dialog.CreatePlaylistDialogFragment;
 import com.staner.tab.playlist.dialog.EditPlaylistDialogFragment;
@@ -167,7 +164,7 @@ public class PlaylistTab implements TabHost.TabContentFactory
                     public void onEditListRequest(int id)
                     {
                         // get the name of the playlist selected
-                        String name = ((TextView)view.findViewById(R.id.textview)).getText().toString();
+                        String name = ((TextView)view.findViewById(R.id.album_name_textview)).getText().toString();
 
                         // get the playlist by name
                         List<MediaFileInfo> mediaFileInfoList = mainActivity.getPlaylistByName(name);
@@ -293,7 +290,7 @@ public class PlaylistTab implements TabHost.TabContentFactory
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
             imageView.setAdjustViewBounds(true);
 
-            ((TextView)convertView.findViewById(R.id.textview)).setText(name);
+            ((TextView)convertView.findViewById(R.id.album_name_textview)).setText(name);
 
             return convertView;
         }

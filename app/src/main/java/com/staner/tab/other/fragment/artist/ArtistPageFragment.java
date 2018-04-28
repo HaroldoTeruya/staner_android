@@ -18,7 +18,6 @@ import android.widget.TextView;
 import com.staner.MainActivity;
 import com.staner.R;
 import com.staner.model.MediaFileInfo;
-import com.staner.tab.album.AlbumMusicFragment;
 import com.staner.util.Util;
 
 import java.util.ArrayList;
@@ -171,7 +170,7 @@ public class ArtistPageFragment extends Fragment
             }
             convertView.setTag(name);
             ((ImageView)convertView.findViewById(R.id.imageview)).setImageBitmap(image);
-            ((TextView)convertView.findViewById(R.id.textview)).setText(name);
+            ((TextView)convertView.findViewById(R.id.album_name_textview)).setText(name);
             return convertView;
         }
 
