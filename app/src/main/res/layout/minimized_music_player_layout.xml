@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/secondary_color"
     android:elevation="3dp"
     android:clickable="true">
 
     <RelativeLayout
+        android:background="@drawable/background_with_shadow"
         android:paddingTop="@dimen/half_margin"
         android:paddingBottom="@dimen/half_margin"
         android:layout_width="match_parent"
@@ -24,6 +25,7 @@
             android:layout_toStartOf="@+id/minimized_equalizer_button">
 
             <ImageView
+                android:id="@+id/minimized_thumbnail_imageview"
                 android:layout_width="@dimen/music_header_width"
                 android:layout_height="@dimen/music_header_width"
                 android:layout_marginLeft="@dimen/half_margin"
@@ -45,6 +47,7 @@
 
         <ImageView
             android:id="@+id/minimized_equalizer_button"
+            android:visibility="gone"
             android:layout_width="@dimen/minimized_player_icon_size"
             android:layout_height="@dimen/minimized_player_icon_size"
             android:layout_centerVertical="true"
@@ -60,11 +63,12 @@
             android:layout_height="@dimen/minimized_player_icon_size"
             android:layout_alignParentEnd="true"
             android:layout_centerVertical="true"
-            android:padding="@dimen/minimized_player_padding"
+            android:layout_marginRight="@dimen/default_margin"
             android:background="@drawable/default_button_indicator"
             android:clickable="true"
-            android:tag="true"
-            android:src="@drawable/play"/>
+            android:padding="@dimen/minimized_player_padding"
+            android:src="@drawable/play"
+            android:tag="true"/>
 
     </RelativeLayout>
 </RelativeLayout>

@@ -4,6 +4,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.provider.MediaStore;
 import android.util.Log;
+import android.view.View;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import com.staner.model.MediaFileInfo;
-
+import com.staner.music.player.MinimizedPlayerFragment;
 
 /**
  * Created by Teruya on 16/12/17.
@@ -24,16 +25,18 @@ public class PlayerController
     //=================================================================================================
 
     private MainActivity mainActivity = null;
-    private MediaPlayer mediaPlayer;
+    private MediaPlayer mediaPlayer = null;
+    private MediaFileInfo currentMediaFileInfo = null;
+    private PlayerFragment playerFragment = null;
+    private MinimizedPlayerFragment minimizedPlayerFragment = null;
+
     public static final String TAG = PlayerController.class.getName();
 
     private String playlistName = "";
     private int currentIndex = 0;
     private List<MediaFileInfo> playlist;
-    private PlayerFragment playerFragment = null;
     private Thread thread = null;
     private String playerState = "stopped";
-    private MediaFileInfo currentMediaFileInfo;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -44,7 +47,6 @@ public class PlayerController
         this.mainActivity = mainActivity;
     }
 
-
     //=================================================================================================
     //============================================= METHODS ===========================================
     //=================================================================================================
@@ -52,38 +54,28 @@ public class PlayerController
     public void populatePlaylist(String playlistName)
     {
         playlist = new ArrayList<>();
-        for( List<MediaFileInfo> mediaFileInfoList : mainActivity.getPlaylistList() )
-        {
+        for( List<MediaFileInfo> mediaFileInfoList : mainActivity.getPlaylistList() ) {
 //            Log.d(TAG, mediaFileInfoList.get(0).getFilePlaylist());
-            if( mediaFileInfoList.get(0).getFilePlaylist() == playlistName )
-            {
-                for ( MediaFileInfo mediaFileInfo : mediaFileInfoList )
-                {
-                    if ( !mediaFileInfo.getFilePath().isEmpty() )
-                    {
+            if( mediaFileInfoList.get(0).getFilePlaylist() == playlistName ) {
+                for ( MediaFileInfo mediaFileInfo : mediaFileInfoList ) {
+                    if ( !mediaFileInfo.getFilePath().isEmpty() ) {
                         playlist.add(mediaFileInfo);
                     }
                 }
             }
         }
 
-        if ( playlist.isEmpty() )
-        {
-            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
-            {
-                if( !mediaFileInfo.getFileAlbumName().isEmpty() && mediaFileInfo.getFileAlbumName().equalsIgnoreCase(playlistName) )
-                {
+        if ( playlist.isEmpty() ) {
+            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() ) {
+                if( !mediaFileInfo.getFileAlbumName().isEmpty() && mediaFileInfo.getFileAlbumName().equalsIgnoreCase(playlistName) ) {
                     playlist.add(mediaFileInfo);
                 }
             }
         }
 
-        if ( playlist.isEmpty() )
-        {
-            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
-            {
-                if( !mediaFileInfo.getFileArtist().isEmpty() && mediaFileInfo.getFileArtist().equalsIgnoreCase(playlistName) )
-                {
+        if ( playlist.isEmpty() ) {
+            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() ) {
+                if( !mediaFileInfo.getFileArtist().isEmpty() && mediaFileInfo.getFileArtist().equalsIgnoreCase(playlistName) ) {
                     playlist.add(mediaFileInfo);
                 }
             }
@@ -100,30 +92,24 @@ public class PlayerController
             }
         }
 
-        if ( playlist.isEmpty() )
-        {
-            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() )
-            {
-                if( !mediaFileInfo.getFileType().isEmpty() && mediaFileInfo.getFileType().equalsIgnoreCase(playlistName) )
-                {
+        if ( playlist.isEmpty() ) {
+            for( MediaFileInfo mediaFileInfo : mainActivity.getMusicList() ) {
+                if( !mediaFileInfo.getFileType().isEmpty() && mediaFileInfo.getFileType().equalsIgnoreCase(playlistName) ) {
                     playlist.add(mediaFileInfo);
                 }
             }
         }
 
-        if ( playlist.isEmpty() )
-        {
+        if ( playlist.isEmpty() ) {
             playlist = mainActivity.getMusicList();
         }
     }
 
     public MediaFileInfo getMusic(int id)
     {
-        for( MediaFileInfo mediaFileInfo : playlist )
-        {
+        for( MediaFileInfo mediaFileInfo : playlist ) {
 //            Log.d(TAG, mediaFileInfo.getId() + " " + id);
-            if( mediaFileInfo.getId() == id )
-            {
+            if( mediaFileInfo.getId() == id ) {
                 return mediaFileInfo;
             }
         }
@@ -188,20 +174,12 @@ public class PlayerController
         {
             e.printStackTrace();
         }
-        if(playerFragment == null) {
-            playerFragment = new PlayerFragment();
-            playerFragment.setCurrentMedia(currentMediaFileInfo);
-            mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
-        } else {
-            playerFragment.setMediaInfo(currentMediaFileInfo);
-            if(!this.playlistName.equals(playlistName)) {
-                playerFragment.setCurrentMedia(currentMediaFileInfo);
-                this.playlistName = playlistName;
-                mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
-            }
-        }
-        playerFragment.setMediaPlayer(mediaPlayer);
 
+        playerFragment = new PlayerFragment();
+        playerFragment.setPlayerFragmentListener(playerFragmentListener);
+        playerFragment.setCurrentMedia(currentMediaFileInfo);
+        mainActivity.getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, playerFragment).addToBackStack(PlayerFragment.TAG).commit();
+        playerFragment.setMediaPlayer(mediaPlayer);
     }
 
 
@@ -228,7 +206,6 @@ public class PlayerController
     public MediaPlayer getMediaPlayer() {
         return this.mediaPlayer;
     }
-
 
     public void prev()
     {
@@ -260,19 +237,21 @@ public class PlayerController
 
     public void stop()
     {
+        playerState = "stopped";
+
+        if(this.thread != null && this.thread.isAlive()) {
+            this.thread.interrupt();
+            this.thread = null;
+        }
+
         if(mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
             mediaPlayer.stop();
             mediaPlayer.release();
             mediaPlayer = null;
-            playerState = "stopped";
         }
-        if(this.thread != null && this.thread.isAlive()) {
-            this.thread.interrupt();
-            this.thread = null;
-        }
-        Log.d(TAG, "stop");
 
+        Log.d(TAG, "stop");
     }
 
     public void seekTo(int msecs) {
@@ -283,13 +262,17 @@ public class PlayerController
     }
 
     public void observeMediaPlayerProgress() {
+        if ( this.thread != null ) {
+            this.thread.interrupt();
+        }
+        this.thread = null;
         this.thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 Log.d(TAG, "run: " + playerState);
                 while (mediaPlayer != null && playerState.equalsIgnoreCase("playing")) {
                     if(mediaPlayer != null && mediaPlayer.isPlaying()) {
-                        Log.d(TAG, "run: ");
+//                        Log.d(TAG, "run: ");
                         setTimeTrack(mediaPlayer.getCurrentPosition());
                     }
                     try {
@@ -302,7 +285,6 @@ public class PlayerController
         });
         this.thread.start();
     }
-
 
     public void setTimeTrack(int time)
     {
@@ -324,6 +306,27 @@ public class PlayerController
             Log.d(TAG, "setTimeTrack: " + e);
         }
     }
+
+    //=================================================================================================
+    //============================================== EVENTS ===========================================
+    //=================================================================================================
+
+    private PlayerFragment.PlayerFragmentListener playerFragmentListener = new PlayerFragment.PlayerFragmentListener()
+    {
+        @Override
+        public void onFragmentClosed(MediaFileInfo mediaFileInfo)
+        {
+            Log.d(TAG, "onFragmentClosed");
+        }
+
+        @Override
+        public void onFragmentMinimized(MediaFileInfo mediaFileInfo)
+        {
+            Log.d(TAG, "onFragmentMinimized");
+
+            mainActivity.findViewById(R.id.minimized_player_content).setVisibility(View.VISIBLE);
+        }
+    };
 
     //=================================================================================================
     //============================================== CLASS ============================================

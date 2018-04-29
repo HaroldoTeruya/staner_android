@@ -35,16 +35,17 @@ public class PlayerFragment extends Fragment
 
     public static final String TAG = PlayerFragment.class.getName();
     private PlayerController playerController = null;
-    private MediaPlayer mediaPlayer = null;
     private TextView progressTextView = null;
     private TextView durationTextView = null;
     private SeekBar musicProgressBar = null;
     private TextView musicNameTextView = null;
     private TextView albumnNameTextView = null;
-    private MediaFileInfo currentMedia = null;
     private ImageView playPauseButton = null;
     private ImageView albumArtImageview = null;
+    private PlayerFragmentListener playerFragmentListener = null;
 
+    private MediaFileInfo currentMedia = null;
+    private MediaPlayer mediaPlayer = null;
 
     //=================================================================================================
     //============================================ CONSTRUCTOR ========================================
@@ -87,13 +88,9 @@ public class PlayerFragment extends Fragment
             @Override
             public void onClick(View view)
             {
-                boolean play = Util.togglePlayer(view);
-                if( play )
-                {
+                if( Util.togglePlayer(view) ) {
                     mainActivity.resume();
-                }
-                else
-                {
+                } else {
                     mainActivity.pause();
                 }
             }
@@ -166,12 +163,22 @@ public class PlayerFragment extends Fragment
                 }
             }
         });
+
+        view.findViewById(R.id.minimized_player_button).setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                PlayerFragment.this.playerFragmentListener.onFragmentMinimized(null);
+            }
+        });
     }
 
     @Override
     public void onDetach()
     {
         super.onDetach();
+        PlayerFragment.this.playerFragmentListener.onFragmentMinimized(null);
         ((MainActivity)getActivity()).getSupportActionBar().show();
     }
 
@@ -191,12 +198,11 @@ public class PlayerFragment extends Fragment
     }
 
     public void setMediaInfo(MediaFileInfo currentMedia) {
-        final MainActivity mainActivity = (MainActivity) getActivity();
+        final MainActivity mainActivity = (MainActivity) PlayerFragment.this.getActivity();
         musicNameTextView.setText(currentMedia.getFileName());
         albumnNameTextView.setText(currentMedia.getFileAlbumName());
         Bitmap image = null;
-        if( currentMedia.getFileAlbumArt() == null )
-        {
+        if( currentMedia.getFileAlbumArt() == null ) {
             image = BitmapFactory.decodeResource(mainActivity.getResources(), R.drawable.album);
         }
         else image = BitmapFactory.decodeByteArray(currentMedia.getFileAlbumArt(), 0, currentMedia.getFileAlbumArt().length);
@@ -220,4 +226,16 @@ public class PlayerFragment extends Fragment
         return musicProgressBar;
     }
 
+    public void setPlayerFragmentListener(PlayerFragmentListener playerFragmentListener) {
+        this.playerFragmentListener = playerFragmentListener;
+    }
+
+    //=================================================================================================
+    //============================================ INTERFACE ==========================================
+    //=================================================================================================
+
+    public interface PlayerFragmentListener {
+        void onFragmentClosed(MediaFileInfo mediaFileInfo);
+        void onFragmentMinimized(MediaFileInfo mediaFileInfo);
+    }
 }

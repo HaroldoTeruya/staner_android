@@ -133,6 +133,8 @@ public class MainActivity extends AppCompatActivity implements
         // used to load all the data. When the loading process is finished, the createTab is called
         getSupportFragmentManager().beginTransaction().add(R.id.music_fragment_content, new SplashScreenFragment()).addToBackStack(SplashScreenFragment.TAG).commit();
 
+//        findViewById(R.id.minimized_player_content).setVisibility(View.VISIBLE);
+
         playerController = new PlayerController(this);
     }
 
